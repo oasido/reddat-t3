@@ -1,0 +1,28 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:unicorn/recommended"
+  ],
+  "rules": {
+    "unicorn/prevent-abbreviations": [
+      "error",
+      {
+        "replacements": {
+          "props": false,
+          "idx": false,
+          "req": false,
+          "res": false,
+          "env": false,
+          "ctx": false,
+          "opts": false
+        }
+      }
+    ]
+  }
+}
