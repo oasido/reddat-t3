@@ -16,6 +16,7 @@
         "replacements": {
           "props": false,
           "idx": false,
+          "evt": false,
           "req": false,
           "res": false,
           "env": false,
