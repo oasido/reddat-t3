@@ -1,13 +1,13 @@
 type TitleAndBodyProps = {
   title: string;
-  body: string;
+  content: string;
 };
 
-export const TitleAndBody = ({ title, body }: TitleAndBodyProps) => {
+export const TitleAndBody = ({ title, content }: TitleAndBodyProps) => {
   return (
     <>
       <h3 className="mt-1 text-xl font-bold text-white">{title}</h3>
-      <p className="text-gray-50">{body}</p>
+      <p className="text-gray-50">{content}</p>
     </>
   );
 };

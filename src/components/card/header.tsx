@@ -1,9 +1,9 @@
 type HeaderProps = {
   subreddit: string;
-  postedBy: string;
+  author: string;
 };
 
-export const Header = ({ subreddit, postedBy }: HeaderProps) => {
+export const Header = ({ subreddit, author }: HeaderProps) => {
   return (
     <div className="flex items-center">
       <div className="mr-2 h-4 w-4 rounded-full bg-blue-400" />
@@ -11,7 +11,7 @@ export const Header = ({ subreddit, postedBy }: HeaderProps) => {
         {subreddit}
       </a>
       <a href="#" className="ml-3 text-xs text-gray-500">
-        Posted by {postedBy}
+        Posted by {author}
       </a>
     </div>
   );
