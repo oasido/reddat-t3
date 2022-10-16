@@ -24,10 +24,7 @@ const Home: NextPage = () => {
       title: "This is another post title!",
       content: "Lorem Ipsum",
     });
-    console.log(newPost);
   };
-
-  console.log(posts);
 
   return (
     <>
@@ -45,22 +42,8 @@ const Home: NextPage = () => {
         >
           New Post
         </button>
-        <Card
-          body="Reddat is a Reddit clone made by oasido. It is built using Next.js, TypeScript, and tRPC."
-          postedBy="u/oasido"
-          subreddit="r/Test"
-          title="Welcome to Reddat"
-          votes={100}
-        />
         {posts?.map((post) => (
-          <Card
-            key={post.id}
-            title={post.title}
-            body={post.content ?? ""}
-            postedBy={`u/${post.author.name}`}
-            subreddit={`r/${post.subreddit.name}`}
-            votes={post.votes}
-          />
+          <Card key={post.id} post={post} />
         ))}
       </Container>
     </>
