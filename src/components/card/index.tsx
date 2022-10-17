@@ -1,4 +1,3 @@
-import { BiDownvote, BiUpvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { TitleAndBody } from "./title-and-body";
 import { Footer } from "./footer";
@@ -7,31 +6,42 @@ import { VotesComponent } from "./votes-component";
 import { Post, User, PostVote, Subreddit } from "@prisma/client";
 
 type PostCardProps = {
-  post: Post & {
+  post?: Post & {
     PostVote: PostVote[];
     subreddit: Subreddit;
     author: User;
   };
+  isLoading?: boolean;
 };
 
-export const Card = ({ post }: PostCardProps): JSX.Element => {
-  const { id, author, votesCount, title, content, subreddit, PostVote } = post;
-  const userMagnitude = (PostVote[0]?.magnitude ?? 0) as -1 | 0 | 1;
+export const Card = ({ post, isLoading }: PostCardProps): JSX.Element => {
+  const { id, author, votesCount, title, content, subreddit } = post ?? {};
+
+  const userMagnitude = ((post && post.PostVote[0]?.magnitude) ?? 0) as
+    | -1
+    | 0
+    | 1;
 
   return (
     <div className="mb-2.5 grid grid-cols-12 rounded-md border border-neutral-700 bg-neutral-800 hover:border-neutral-500">
       <VotesComponent
-        postId={id}
-        votesCount={votesCount}
+        postId={id && id}
+        votesCount={votesCount && votesCount}
         userMagnitude={userMagnitude}
+        isLoading={isLoading}
       />
       <div className="space-between col-span-11 flex flex-col">
         <div className="p-2">
           <Header
-            subreddit={`r/${subreddit?.name}`}
-            author={`u/${author?.name ?? author.id}`}
+            subreddit={subreddit?.name}
+            author={author?.name ?? undefined}
+            isLoading={isLoading}
           />
-          <TitleAndBody title={title} content={content ?? ""} />
+          <TitleAndBody
+            isLoading={isLoading}
+            title={title}
+            content={content ?? undefined}
+          />
         </div>
         <Footer label="Comments" icon={<GoComment />} />
       </div>

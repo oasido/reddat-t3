@@ -29,7 +29,7 @@ const SubredditPage: NextPage = () => {
 
   if (subreddit === null) return <SubredditNotFound slug={slug} />;
 
-  return subreddit && posts ? (
+  return (
     <>
       <Head>
         <title>{`r/${slug} - Reddat`}</title>
@@ -41,13 +41,17 @@ const SubredditPage: NextPage = () => {
 
       <SubredditHeader subreddit={slug} />
       <Container>
-        {posts?.map((post) => (
-          <Card key={post.id} post={post} />
-        ))}
+        {subreddit || posts ? (
+          <>
+            {posts?.map((post) => (
+              <Card key={post.id} post={post} />
+            ))}
+          </>
+        ) : (
+          [1, 2, 3].map((post, idx) => <Card key={idx} isLoading={true} />)
+        )}
       </Container>
     </>
-  ) : (
-    <SubredditNotFound slug={slug} />
   );
 };
 

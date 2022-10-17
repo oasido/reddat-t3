@@ -4,17 +4,16 @@ import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
 
 type VotesProps = {
-  // userId: string;
-  postId: string;
+  postId?: string;
+
   /** 1 if the user has upvoted this post, -1 if they've downvoted, else 0. */
-  userMagnitude: -1 | 0 | 1;
-  /** Number of (upvotes - downvotes) this Post has received so far. */
-  votesCount: number;
+  userMagnitude?: -1 | 0 | 1;
+
+  votesCount?: number;
+  isLoading?: boolean;
 };
 export const VotesComponent = (props: VotesProps): JSX.Element => {
   const { postId, userMagnitude, votesCount } = props;
-
-  const { data: sessionData } = useSession();
 
   const voteOnPost = trpc.posts.vote.useMutation();
 
@@ -26,10 +25,9 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
       event.preventDefault();
 
       setMagnitude(newMagnitude);
-      console.log(votesCount - (magnitude - userMagnitude));
 
       await voteOnPost.mutateAsync({
-        postId,
+        postId: postId ?? "",
         magnitude: newMagnitude,
       });
     };
@@ -37,6 +35,20 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
   useEffect(() => {
     setMagnitude(userMagnitude);
   }, [userMagnitude]);
+
+  if (
+    typeof magnitude === "undefined" ||
+    typeof votesCount === "undefined" ||
+    typeof userMagnitude === "undefined"
+  ) {
+    return (
+      <div className="col-span-1 flex flex-col items-center justify-center bg-neutral-900/25 p-2 text-2xl ">
+        <span className="text-center text-base font-[600] text-gray-200">
+          <div className="mt-1 h-5 w-5 rounded-lg bg-neutral-400/20 text-xl font-bold" />
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="col-span-1 flex flex-col items-center justify-center bg-neutral-900/25 p-2 text-2xl ">
