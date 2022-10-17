@@ -35,6 +35,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Navbar />
+
       <Container>
         <button
           onClick={() => handleNewPost()}

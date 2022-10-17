@@ -12,6 +12,27 @@ export const postsRouter = router({
     });
   }),
 
+  getBySubreddit: publicProcedure
+    .input(
+      z.object({
+        subredditName: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.post.findMany({
+        where: {
+          subreddit: {
+            name: input.subredditName,
+          },
+        },
+        include: {
+          subreddit: true,
+          author: true,
+          PostVote: true,
+        },
+      });
+    }),
+
   new: protectedProcedure
     .input(
       z.object({

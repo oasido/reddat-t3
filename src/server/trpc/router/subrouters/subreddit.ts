@@ -6,6 +6,16 @@ export const subredditRouter = router({
     return ctx.prisma.subreddit.findMany();
   }),
 
+  getOne: publicProcedure
+    .input(z.object({ subredditName: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.subreddit.findUnique({
+        where: {
+          name: input.subredditName,
+        },
+      });
+    }),
+
   new: protectedProcedure
     .input(
       z.object({
