@@ -19,7 +19,7 @@ export const Card = ({ post }: PostCardProps): JSX.Element => {
   const userMagnitude = (PostVote[0]?.magnitude ?? 0) as -1 | 0 | 1;
 
   return (
-    <div className="mb-2.5 grid grid-cols-12 rounded-md border border-transparent bg-neutral-800 hover:border-neutral-500">
+    <div className="mb-2.5 grid grid-cols-12 rounded-md border border-neutral-700 bg-neutral-800 hover:border-neutral-500">
       <VotesComponent
         postId={id}
         votesCount={votesCount}
@@ -28,7 +28,7 @@ export const Card = ({ post }: PostCardProps): JSX.Element => {
       <div className="space-between col-span-11 flex flex-col">
         <div className="p-2">
           <Header
-            subreddit={subreddit?.name}
+            subreddit={`r/${subreddit?.name}`}
             author={`u/${author?.name ?? author.id}`}
           />
           <TitleAndBody title={title} content={content ?? ""} />
