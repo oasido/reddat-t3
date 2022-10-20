@@ -13,6 +13,9 @@ export const subredditRouter = router({
         where: {
           name: input.subredditName,
         },
+        include: {
+          moderators: true,
+        },
       });
     }),
 
