@@ -15,6 +15,11 @@ export const subredditRouter = router({
         },
         include: {
           moderators: true,
+          _count: {
+            select: {
+              users: true,
+            },
+          },
         },
       });
     }),
