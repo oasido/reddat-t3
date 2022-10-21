@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Card } from "../../components/card";
@@ -7,12 +8,14 @@ import { Navbar } from "../../components/navbar";
 import { SubredditHeader } from "../../components/subreddit/header";
 import { SubredditNotFound } from "../../components/subreddit/scenarios/not-found";
 import { trpc } from "../../utils/trpc";
+import { Sidebar } from "../../components/subreddit/sidebar";
 
 export type SlugType = {
   slug: string;
 };
 
 const SubredditPage: NextPage = () => {
+  const { data: sessionData } = useSession();
   const router = useRouter();
 
   // We know that the slug is a string based on the file name,
@@ -29,6 +32,14 @@ const SubredditPage: NextPage = () => {
 
   if (subreddit === null) return <SubredditNotFound slug={slug} />;
 
+  const isAdmin = () => {
+    return subreddit?.moderators.find(
+      (moderator) => moderator.userId === sessionData?.user?.id
+    )
+      ? true
+      : false;
+  };
+
   return (
     <>
       <Head>
@@ -39,8 +50,9 @@ const SubredditPage: NextPage = () => {
 
       <Navbar />
 
-      <SubredditHeader subreddit={slug} />
-      <Container>
+      <SubredditHeader slug={slug} subreddit={subreddit} isAdmin={isAdmin()} />
+
+      <Container sidebar={<Sidebar subreddit={subreddit} slug={slug} />}>
         {subreddit || posts ? (
           <>
             {posts?.map((post) => (
@@ -48,7 +60,7 @@ const SubredditPage: NextPage = () => {
             ))}
           </>
         ) : (
-          [1, 2, 3].map((post, idx) => <Card key={idx} isLoading={true} />)
+          [1, 2, 3].map((_, idx) => <Card key={idx} isLoading={true} />)
         )}
       </Container>
     </>
