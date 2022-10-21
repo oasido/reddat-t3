@@ -1,11 +1,18 @@
+import { Subreddit, SubredditModerator } from "@prisma/client";
+
 type SubredditHeaderProps = {
-  subreddit: string;
+  slug: string;
+  subreddit?: Subreddit & {
+    moderators: SubredditModerator[];
+  };
+  isAdmin: boolean;
 };
 
 export const SubredditHeader = ({
+  slug,
   subreddit,
+  isAdmin,
 }: SubredditHeaderProps): JSX.Element => {
-  console.log(subreddit);
   return (
     <div className="relative h-52 bg-neutral-800">
       <div className="h-32 bg-red-500 align-baseline" />
@@ -13,8 +20,22 @@ export const SubredditHeader = ({
         <div className="flex items-end">
           <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
           <div>
-            <h2 className="text-3xl font-[600] text-white">{subreddit}</h2>
-            <span className="text-sm text-gray-400">r/{subreddit}</span>
+            <div className="flex items-end">
+              <h2 className="text-2xl font-bold text-white">
+                {subreddit?.title ?? slug}
+              </h2>
+              {isAdmin && (
+                <span
+                  title="Click to moderate this subreddit"
+                  className="mx-2 cursor-pointer select-none text-sm text-gray-400 underline hover:text-gray-300"
+                >
+                  Manage
+                </span>
+              )}
+            </div>
+            <span className="text-sm text-gray-400">
+              r/{subreddit?.name ?? slug}
+            </span>
           </div>
         </div>
       </div>
