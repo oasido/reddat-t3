@@ -1,4 +1,4 @@
-import { BiUpvote, BiDownvote } from "react-icons/bi";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
@@ -52,19 +52,27 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
 
   return (
     <div className="col-span-1 flex flex-col items-center justify-center bg-neutral-900/25 p-2 text-2xl ">
-      <button className="radius rounded-full p-1.5 hover:bg-gray-200/10">
-        <BiUpvote
-          onClick={makeHandleClick(magnitude > 0 ? 0 : 1)}
-          className={magnitude > 0 ? "text-red-500" : "text-neutral-500"}
+      <button
+        onClick={makeHandleClick(magnitude > 0 ? 0 : 1)}
+        className="rounded-full p-1.5 hover:bg-gray-200/10"
+      >
+        <ChevronUpIcon
+          className={`h-6 w-6 ${
+            magnitude > 0 ? "text-red-500" : "text-neutral-500"
+          }`}
         />
       </button>
       <span className="text-center text-base font-[600] text-gray-200">
         {votesCount + (magnitude - userMagnitude)}
       </span>
-      <button className="radius rounded-full p-1.5 hover:bg-gray-200/10">
-        <BiDownvote
-          onClick={makeHandleClick(magnitude < 0 ? 0 : -1)}
-          className={magnitude < 0 ? "text-red-500" : "text-neutral-500"}
+      <button
+        onClick={makeHandleClick(magnitude < 0 ? 0 : -1)}
+        className="rounded-full p-1.5 hover:bg-gray-200/10"
+      >
+        <ChevronDownIcon
+          className={`h-6 w-6 ${
+            magnitude < 0 ? "text-red-500" : "text-neutral-500"
+          }`}
         />
       </button>
     </div>

@@ -1,4 +1,4 @@
-import { GoComment } from "react-icons/go";
+import { ChatBubbleBottomCenterIcon } from "@heroicons/react/20/solid";
 import { TitleAndBody } from "./title-and-body";
 import { Footer } from "./footer";
 import { Header } from "./header";
@@ -43,7 +43,10 @@ export const Card = ({ post, isLoading }: PostCardProps): JSX.Element => {
             content={content ?? undefined}
           />
         </div>
-        <Footer label="Comments" icon={<GoComment />} />
+        <Footer
+          label="Comments"
+          icon={<ChatBubbleBottomCenterIcon className="h-4 w-4" />}
+        />
       </div>
     </div>
   );
