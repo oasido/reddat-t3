@@ -30,7 +30,7 @@ export const Select = () => {
   return (
     <div className="w-full sm:w-64">
       <Listbox value={selected} onChange={setSelected}>
-        <div className="relative mt-1">
+        <div className="relative z-10 mt-1">
           <Listbox.Button className="flex w-full cursor-pointer items-center rounded-lg bg-neutral-800 py-1 pl-3 pr-10 text-left text-lg text-white focus:outline-none focus-visible:border-neutral-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-neutral-300">
             <span className="mr-2 h-4 w-4">{selected?.icon}</span>
             <span className="hidden truncate sm:block">{selected?.label}</span>
