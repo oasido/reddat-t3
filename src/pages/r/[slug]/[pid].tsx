@@ -2,19 +2,19 @@ import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Card } from "../../components/card";
-import { Container } from "../../components/container";
-import { Navbar } from "../../components/navbar";
-import { SubredditHeader } from "../../components/subreddit/header";
-import { SubredditNotFound } from "../../components/subreddit/scenarios/not-found";
-import { trpc } from "../../utils/trpc";
-import { Sidebar } from "../../components/subreddit/sidebar";
+import { Card } from "../../../components/card";
+import { Container } from "../../../components/container";
+import { Navbar } from "../../../components/navbar";
+import { SubredditHeader } from "../../../components/subreddit/header";
+import { SubredditNotFound } from "../../../components/subreddit/scenarios/not-found";
+import { trpc } from "../../../utils/trpc";
+import { Sidebar } from "../../../components/subreddit/sidebar";
 
 export type SlugType = {
   slug: string;
 };
 
-const SubredditPage: NextPage = () => {
+const Post: NextPage = () => {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
@@ -26,8 +26,8 @@ const SubredditPage: NextPage = () => {
     subredditName: slug,
   });
 
-  const { data: posts } = trpc.posts.getBySubreddit.useQuery({
-    subredditName: slug,
+  const { data: post } = trpc.posts.getOne.useQuery({
+    id: router.query.pid as string,
   });
 
   if (subreddit === null) return <SubredditNotFound slug={slug} />;
@@ -53,18 +53,10 @@ const SubredditPage: NextPage = () => {
       <SubredditHeader slug={slug} subreddit={subreddit} isAdmin={isAdmin()} />
 
       <Container sidebar={<Sidebar subreddit={subreddit} slug={slug} />}>
-        {subreddit || posts ? (
-          <>
-            {posts?.map((post) => (
-              <Card key={post.id} post={post} />
-            ))}
-          </>
-        ) : (
-          [1, 2, 3].map((_, idx) => <Card key={idx} isLoading={true} />)
-        )}
+        {post ? <Card post={post} /> : <Card isLoading={true} />}
       </Container>
     </>
   );
 };
 
-export default SubredditPage;
+export default Post;
