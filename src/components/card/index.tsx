@@ -23,7 +23,7 @@ export const Card = ({ post, isLoading }: PostCardProps): JSX.Element => {
     | 1;
 
   return (
-    <div className="mb-2.5 grid grid-cols-12 rounded-md border border-neutral-700 bg-neutral-800 hover:border-neutral-500">
+    <div className="mb-2.5 grid grid-cols-12 rounded-md border border-neutral-700 bg-neutral-800 hover:cursor-pointer hover:border-neutral-500">
       <VotesComponent
         postId={id && id}
         votesCount={votesCount && votesCount}
