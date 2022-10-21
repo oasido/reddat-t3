@@ -5,7 +5,7 @@ type SubredditHeaderProps = {
   subreddit?: Subreddit & {
     moderators: SubredditModerator[];
   };
-  isAdmin: boolean;
+  isAdmin?: boolean;
 };
 
 export const SubredditHeader = ({
