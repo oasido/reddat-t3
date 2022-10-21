@@ -9,7 +9,6 @@ type HeaderProps = {
 const startsWithSlashR = (value: string): boolean => /^\/r\//.test(value);
 
 export const Header = ({ subreddit, author, isLoading }: HeaderProps) => {
-  console.log(author);
   return (
     <div className="flex items-center">
       <div className="mr-2 h-4 w-4 rounded-full bg-blue-400" />
