@@ -60,7 +60,7 @@ const SubredditPage: NextPage = () => {
             ))}
           </>
         ) : (
-          [1, 2, 3].map((post, idx) => <Card key={idx} isLoading={true} />)
+          [1, 2, 3].map((_, idx) => <Card key={idx} isLoading={true} />)
         )}
       </Container>
     </>
