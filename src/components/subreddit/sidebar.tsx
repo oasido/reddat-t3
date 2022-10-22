@@ -1,7 +1,6 @@
 import { Subreddit, SubredditModerator } from "@prisma/client";
 import dayjs from "dayjs";
 import { CakeIcon } from "@heroicons/react/20/solid";
-import { trpc } from "../../utils/trpc";
 
 type SidebarProps = {
   subreddit?: Subreddit & {
@@ -13,11 +12,7 @@ type SidebarProps = {
   slug: string;
 };
 
-export const Sidebar = ({ subreddit, slug }: SidebarProps): JSX.Element => {
-  // const { data: membersAmount } = trpc.subreddit.membersAmount.useQuery({
-  //   subredditName: slug,
-  // });
-
+export const Sidebar = ({ subreddit }: SidebarProps): JSX.Element => {
   return (
     <div className="mb-2.5 rounded-md border border-neutral-700 bg-neutral-800">
       <div className="space-between flex flex-col">

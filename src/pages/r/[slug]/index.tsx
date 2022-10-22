@@ -5,7 +5,6 @@ import {
 } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { Card } from "../../../components/card";
 import { Container } from "../../../components/container";
 import { Navbar } from "../../../components/navbar";

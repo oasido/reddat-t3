@@ -16,7 +16,7 @@ type CommentsProps = {
   isLoading?: boolean;
 };
 
-export const Comments = ({ post, isLoading }: CommentsProps): JSX.Element => {
+export const Comments = ({ post }: CommentsProps): JSX.Element => {
   const { id, subreddit } = post ?? {};
 
   dayjs.extend(relativeTime);

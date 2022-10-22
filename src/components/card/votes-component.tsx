@@ -1,7 +1,6 @@
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
-import { useSession } from "next-auth/react";
 
 type VotesProps = {
   postId?: string;
