@@ -13,6 +13,7 @@ import { SubredditHeader } from "../../../components/subreddit/header";
 import { SubredditNotFound } from "../../../components/subreddit/scenarios/not-found";
 import { trpc } from "../../../utils/trpc";
 import { Sidebar } from "../../../components/subreddit/sidebar";
+import { SubredditModerator } from "@prisma/client";
 
 export type SlugType = {
   slug: string;
@@ -52,7 +53,8 @@ const SubredditPage: NextPage = ({
 
   const isAdmin = () => {
     return subreddit?.moderators.find(
-      (moderator) => moderator.userId === sessionData?.user?.id
+      (moderator: SubredditModerator) =>
+        moderator.userId === sessionData?.user?.id
     )
       ? true
       : false;
