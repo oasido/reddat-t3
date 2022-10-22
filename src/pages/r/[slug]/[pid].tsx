@@ -1,4 +1,8 @@
-import { NextPage } from "next";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -9,51 +13,58 @@ import { SubredditHeader } from "../../../components/subreddit/header";
 import { SubredditNotFound } from "../../../components/subreddit/scenarios/not-found";
 import { trpc } from "../../../utils/trpc";
 import { Sidebar } from "../../../components/subreddit/sidebar";
+import { Comments } from "../../../components/comments";
 
-export type SlugType = {
-  slug: string;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      params: context?.params,
+    },
+  };
 };
 
-const Post: NextPage = () => {
-  const { data: sessionData } = useSession();
+const Post: NextPage = ({
+  params,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
 
-  // We know that the slug is a string based on the file name,
-  // see @https://nextjs.org/docs/routing/dynamic-routes#catch-all-routes
-  const { slug } = router?.query as SlugType;
-
   const { data: subreddit } = trpc.subreddit.getOne.useQuery({
-    subredditName: slug,
+    subredditName: params?.slug,
   });
 
   const { data: post } = trpc.posts.getOne.useQuery({
-    id: router.query.pid as string,
+    id: params?.pid,
   });
 
-  if (subreddit === null) return <SubredditNotFound slug={slug} />;
+  if (subreddit === null) return <SubredditNotFound slug={params.slug} />;
 
-  const isAdmin = () => {
-    return subreddit?.moderators.find(
-      (moderator) => moderator.userId === sessionData?.user?.id
-    )
-      ? true
-      : false;
-  };
+  // const isPostCreator = () => {
+  //   logic here
+  // };
 
   return (
     <>
       <Head>
-        <title>{`r/${slug} - Reddat`}</title>
+        <title>{`r/${params.slug} - Reddat`}</title>
         <meta name="description" content="Reddat: A Reddit Clone by oasido" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Navbar />
 
-      <SubredditHeader slug={slug} subreddit={subreddit} isAdmin={isAdmin()} />
+      <SubredditHeader slug={params.slug} subreddit={subreddit} />
 
-      <Container sidebar={<Sidebar subreddit={subreddit} slug={slug} />}>
-        {post ? <Card post={post} /> : <Card isLoading={true} />}
+      <Container sidebar={<Sidebar subreddit={subreddit} slug={params.slug} />}>
+        {post ? (
+          <>
+            <Card post={post} single={true} />
+            <Comments post={post} />
+          </>
+        ) : (
+          <>
+            <Card isLoading={true} />
+          </>
+        )}
       </Container>
     </>
   );
