@@ -33,6 +33,32 @@ export const postsRouter = router({
       });
     }),
 
+  getOne: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      const response = ctx.prisma.post.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          subreddit: true,
+          author: true,
+          PostVote: true,
+          comments: {
+            include: {
+              author: true,
+            },
+          },
+        },
+      });
+
+      return response;
+    }),
+
   new: protectedProcedure
     .input(
       z.object({
