@@ -1,7 +1,7 @@
-import { Button } from "./button";
 import { Select } from "./select";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { UserMenu } from "./user-dropdown";
 
 export const Navbar = () => {
   const { data: sessionData } = useSession();
@@ -18,10 +18,16 @@ export const Navbar = () => {
       </div>
 
       <div>
-        <Button
-          label={sessionData ? sessionData.user?.name ?? "Logout" : "Login"}
-          onClick={sessionData ? undefined : () => signIn("reddit")}
-        />
+        {sessionData ? (
+          <UserMenu />
+        ) : (
+          <button
+            onClick={() => signIn("reddit")}
+            className="mx-3 rounded-full bg-gray-300 px-4 py-0.5 font-bold"
+          >
+            Login
+          </button>
+        )}
       </div>
     </nav>
   );
