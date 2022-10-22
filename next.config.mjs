@@ -22,6 +22,6 @@ export default defineNextConfig({
     defaultLocale: "en",
   },
   images: {
-    domains: ["avatars.dicebear.com"],
+    domains: ["avatars.dicebear.com", "github.com"],
   },
 });
