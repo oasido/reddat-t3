@@ -28,10 +28,10 @@ export const Select = () => {
   const [selected, setSelected] = useState(menuItems[0]);
 
   return (
-    <div className="w-full sm:w-64">
+    <div className="w-full rounded-sm border border-transparent hover:border-neutral-500/50 sm:w-64">
       <Listbox value={selected} onChange={setSelected}>
-        <div className="relative z-10 mt-1">
-          <Listbox.Button className="flex w-full cursor-pointer items-center rounded-lg bg-neutral-800 py-1 pl-3 pr-10 text-left text-lg text-white focus:outline-none focus-visible:border-neutral-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-neutral-300">
+        <div className="relative z-10 my-0.5">
+          <Listbox.Button className="flex w-full cursor-pointer items-center rounded-lg bg-neutral-800 pl-3 pr-10 text-left text-lg text-white focus:outline-none focus-visible:border-neutral-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-neutral-300">
             <span className="mr-2 h-4 w-4">{selected?.icon}</span>
             <span className="hidden truncate sm:block">{selected?.label}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -40,10 +40,12 @@ export const Select = () => {
           </Listbox.Button>
 
           <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-95 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform scale-100 opacity-100"
+            leaveTo="transform scale-95 opacity-0"
           >
             <Listbox.Options
               className="absolute mt-1 max-h-60 w-full min-w-fit 
