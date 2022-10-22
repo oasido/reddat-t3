@@ -4,11 +4,17 @@ type HeaderProps = {
   subreddit?: string;
   author?: string;
   isLoading?: boolean;
+  timeAgo: string;
 };
 
 const startsWithSlashR = (value: string): boolean => /^\/r\//.test(value);
 
-export const Header = ({ subreddit, author, isLoading }: HeaderProps) => {
+export const Header = ({
+  subreddit,
+  author,
+  timeAgo,
+  isLoading,
+}: HeaderProps) => {
   return (
     <div className="flex items-center">
       <div className="mr-2 h-4 w-4 rounded-full bg-blue-400" />
@@ -32,6 +38,9 @@ export const Header = ({ subreddit, author, isLoading }: HeaderProps) => {
           </Link>
           <a href="#" className="ml-3 text-xs text-gray-500">
             Posted by u/{author}
+          </a>
+          <a href="#" className="ml-3 text-xs text-gray-500">
+            {timeAgo}
           </a>
         </>
       )}
