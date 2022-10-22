@@ -3,9 +3,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { Card } from "../../../components/card";
 import { Container } from "../../../components/container";
 import { Navbar } from "../../../components/navbar";
@@ -26,8 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Post: NextPage = ({
   params,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-
   const { data: subreddit } = trpc.subreddit.getOne.useQuery({
     subredditName: params?.slug,
   });

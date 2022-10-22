@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import { Container } from "../components/container";
 import { Card } from "../components/card";
@@ -9,7 +8,6 @@ import { Navbar } from "../components/navbar";
 const Home: NextPage = () => {
   // const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
   // const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
-  const { data: sessionData } = useSession();
 
   const { data: posts } = trpc.posts.getAll.useQuery();
 
