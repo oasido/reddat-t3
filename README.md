@@ -16,7 +16,7 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 - [x] Downvotes
 - [x] Dark mode
 - [x] Mobile friendly
-- [x] User avatars
+- [x] User avatars & placeholders (using [dicebear](https://avatars.dicebear.com/))
 
 ### 🚧 Roadmap
 
