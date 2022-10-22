@@ -8,7 +8,6 @@ import {
 import { ReactNode } from "react";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 
 type MenuItem = {
   label: string;
