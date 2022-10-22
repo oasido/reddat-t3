@@ -8,6 +8,7 @@ import {
 import { ReactNode } from "react";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 type MenuItem = {
   label: string;
@@ -20,17 +21,17 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   {
     label: "Profile",
-    href: "/profile",
+    href: "", // "/profile"
     icon: <HomeIcon className="h-4 w-4" />,
   },
   {
     label: "User Settings",
-    href: "/settings",
+    href: "", // "/settings"
     icon: <ArrowTrendingUpIcon className="h-4 w-4" />,
   },
   {
     label: "Log Out",
-    href: "/api/auth/signout",
+    href: "", // keep empty, we'll use onClick instead
     icon: <ArrowLeftOnRectangleIcon className="h-4 w-4" />,
     onClick: () => signOut(),
     danger: true,
@@ -46,20 +47,16 @@ export const UserMenu = () => {
         <div className="relative z-10 my-1.5">
           <Menu.Button className="flex w-full cursor-pointer justify-center rounded-lg bg-neutral-800 pl-2 pr-8 text-left text-lg text-white focus:outline-none focus-visible:border-neutral-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-neutral-300 sm:pr-10">
             <div className="flex  items-center gap-1">
-              {sessionData ? (
-                <Image
-                  className="rounded-sm"
-                  src={
-                    sessionData?.user?.image ??
-                    `https://avatars.dicebear.com/api/initials/${sessionData?.user?.name}.svg`
-                  }
-                  width={25}
-                  height={25}
-                  alt={`${sessionData?.user?.name}'s avatar`}
-                />
-              ) : (
-                <span>Login</span>
-              )}
+              <Image
+                className="rounded-sm"
+                src={
+                  sessionData?.user?.image ??
+                  `https://avatars.dicebear.com/api/initials/${sessionData?.user?.name}.svg`
+                }
+                width={25}
+                height={25}
+                alt={`${sessionData?.user?.name}'s avatar`}
+              />
 
               <span className="hidden text-xs font-[600] sm:block">
                 {sessionData?.user?.name}
@@ -81,28 +78,32 @@ export const UserMenu = () => {
             <Menu.Items className="absolute right-0 mt-1 max-h-60 w-full min-w-fit overflow-auto rounded-md bg-neutral-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="relative cursor-pointer select-none">
                 {menuItems.map((item, idx) => (
-                  <Menu.Item key={idx}>
-                    {({ active }) => (
-                      <button
-                        className={`h-full w-full py-2 px-3 ${
-                          active
-                            ? "bg-neutral-700 text-neutral-300"
-                            : "text-neutral-300"
-                        }`}
-                        onClick={item.onClick && item.onClick}
-                      >
-                        <div
-                          className={`flex items-center gap-2 truncate 
+                  <a key={idx}>
+                    <Link href={item.href ?? "#"}>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            className={`h-full w-full py-2 px-3 ${
+                              active
+                                ? "bg-neutral-700 text-neutral-300"
+                                : "text-neutral-300"
+                            }`}
+                            onClick={item.onClick && item.onClick}
+                          >
+                            <div
+                              className={`flex items-center gap-2 truncate 
                         ${active ? "font-medium" : "font-normal"} ${
-                            item.danger && " text-red-500"
-                          }`}
-                        >
-                          {item.icon}
-                          {item.label}
-                        </div>
-                      </button>
-                    )}
-                  </Menu.Item>
+                                item.danger && " text-red-500"
+                              }`}
+                            >
+                              {item.icon}
+                              {item.label}
+                            </div>
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </Link>
+                  </a>
                 ))}
               </div>
             </Menu.Items>
