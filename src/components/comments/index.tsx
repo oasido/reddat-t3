@@ -32,7 +32,7 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
       commentSchema.parse(commentInput);
       setCommentInputErrors(undefined);
     } catch (error) {
-      setCommentInputErrors(error);
+      error instanceof ZodError && setCommentInputErrors(error);
       console.log(error);
     }
   };
