@@ -27,22 +27,21 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
     <Link href={`/r/${subreddit?.name}/${id}`}>
       <div className="-mt-1 rounded-md border border-neutral-700 bg-neutral-800">
         <div className="border-b-2 border-b-neutral-600/60">
-          <h3 className="m-2 font-bold text-white">Comments:</h3>
           <div className="flex justify-center">
             <textarea
               placeholder="What are your thoughts?"
               onClick={() => setIsInputActive(true)}
               className={`${
                 isInputActive ? "h-20" : "h-10"
-              } mx-2 mb-2 max-h-20 w-full resize-none rounded-md bg-neutral-700 p-2 text-white duration-75 ease-in`}
+              } m-2 max-h-20 w-full resize-none rounded-md bg-neutral-700 p-2 text-white duration-75 ease-in`}
             ></textarea>
           </div>
           <div
             className={`${
               isInputActive
-                ? "my-2 mr-2 flex items-center justify-end gap-2"
+                ? "mx-2 mb-2 flex items-center justify-end gap-2"
                 : "hidden"
-            } easy-in duration-75 `}
+            } easy-in duration-75`}
           >
             <button
               onClick={() => setIsInputActive(false)}
