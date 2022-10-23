@@ -59,6 +59,27 @@ export const postsRouter = router({
       return response;
     }),
 
+  postComment: protectedProcedure
+    .input(
+      z.object({
+        content: z.string().max(150).trim().min(2),
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.prisma.comment.create({
+          data: {
+            content: input.content,
+            postId: input.postId,
+            authorId: ctx.session.user.id,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }),
+
   new: protectedProcedure
     .input(
       z.object({
