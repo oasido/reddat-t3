@@ -3,6 +3,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { SingleComment } from "./single-comment";
+import { useState } from "react";
 
 type CommentsProps = {
   post?: Post & {
@@ -18,6 +19,7 @@ type CommentsProps = {
 
 export const Comments = ({ post }: CommentsProps): JSX.Element => {
   const { id, subreddit } = post ?? {};
+  const [isInputActive, setIsInputActive] = useState(false);
 
   dayjs.extend(relativeTime);
 
@@ -29,8 +31,28 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
           <div className="flex justify-center">
             <textarea
               placeholder="What are your thoughts?"
-              className="mx-2 mb-3 max-h-14 w-full rounded-md bg-neutral-700 p-2 text-white"
+              onClick={() => setIsInputActive(true)}
+              className={`${
+                isInputActive ? "h-20" : "h-10"
+              } mx-2 mb-2 max-h-20 w-full resize-none rounded-md bg-neutral-700 p-2 text-white duration-75 ease-in`}
             ></textarea>
+          </div>
+          <div
+            className={`${
+              isInputActive
+                ? "my-2 mr-2 flex items-center justify-end gap-2"
+                : "hidden"
+            } easy-in duration-75 `}
+          >
+            <button
+              onClick={() => setIsInputActive(false)}
+              className="rounded-md bg-red-700 px-2 py-1 font-bold text-white hover:bg-red-600 "
+            >
+              Cancel
+            </button>
+            <button className="rounded-md bg-sky-700 px-2 py-1 font-bold text-white hover:bg-sky-600 ">
+              Post
+            </button>
           </div>
         </div>
 
