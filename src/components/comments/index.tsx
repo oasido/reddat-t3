@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { SingleComment } from "./single-comment";
 import { useState } from "react";
+import { z, ZodError } from "zod";
 
 type CommentsProps = {
   post?: Post & {
@@ -19,9 +20,22 @@ type CommentsProps = {
 
 export const Comments = ({ post }: CommentsProps): JSX.Element => {
   const { id, subreddit } = post ?? {};
-  const [isInputActive, setIsInputActive] = useState(false);
-
+  const [isCommentInputActive, setIsCommentInputActive] = useState(false);
+  const [commentInput, setCommentInput] = useState("");
+  const [commentInputErrors, setCommentInputErrors] = useState<ZodError>();
   dayjs.extend(relativeTime);
+
+  const commentSchema = z.string().max(150).trim().min(2);
+
+  const postComment = () => {
+    try {
+      commentSchema.parse(commentInput);
+      setCommentInputErrors(undefined);
+    } catch (error) {
+      setCommentInputErrors(error);
+      console.log(error);
+    }
+  };
 
   return (
     <Link href={`/r/${subreddit?.name}/${id}`}>
@@ -30,26 +44,48 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
           <div className="flex justify-center">
             <textarea
               placeholder="What are your thoughts?"
-              onClick={() => setIsInputActive(true)}
+              onClick={() => setIsCommentInputActive(true)}
+              value={commentInput}
+              onChange={(evt) => {
+                setCommentInput(evt.target.value);
+                // setCommentInputErrors(undefined);
+              }}
               className={`${
-                isInputActive ? "h-20" : "h-10"
-              } m-2 max-h-20 w-full resize-none rounded-md bg-neutral-700 p-2 text-white duration-75 ease-in`}
-            ></textarea>
+                isCommentInputActive ? "h-20" : "h-11"
+              } m-2 max-h-20 w-full resize-none rounded-md border-2 bg-neutral-700 p-2 text-white outline-0 duration-75 ease-in
+              ${
+                commentInputErrors
+                  ? "border-2 border-red-600"
+                  : "border-transparent"
+              }`}
+            />
           </div>
           <div
             className={`${
-              isInputActive
+              isCommentInputActive
                 ? "mx-2 mb-2 flex items-center justify-end gap-2"
                 : "hidden"
             } easy-in duration-75`}
           >
+            {commentInputErrors &&
+              commentInputErrors.errors.map((error, idx) => (
+                <p key={idx} className="text-sm font-[600] text-red-500">
+                  {error.message}
+                </p>
+              ))}
             <button
-              onClick={() => setIsInputActive(false)}
+              onClick={() => {
+                setIsCommentInputActive(false);
+                setCommentInputErrors(undefined);
+              }}
               className="rounded-md bg-red-700 px-2 py-1 font-bold text-white hover:bg-red-600 "
             >
               Cancel
             </button>
-            <button className="rounded-md bg-sky-700 px-2 py-1 font-bold text-white hover:bg-sky-600 ">
+            <button
+              onClick={() => postComment()}
+              className="rounded-md bg-sky-700 px-2 py-1 font-bold text-white hover:bg-sky-600 "
+            >
               Post
             </button>
           </div>
