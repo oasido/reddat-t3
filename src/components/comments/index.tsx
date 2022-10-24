@@ -5,6 +5,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { SingleComment } from "./single-comment";
 import { useState } from "react";
 import { z, ZodError } from "zod";
+import { trpc } from "../../utils/trpc";
 
 type CommentsProps = {
   post?: Post & {
@@ -22,18 +23,39 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
   const { id, subreddit } = post ?? {};
   const [isCommentInputActive, setIsCommentInputActive] = useState(false);
   const [commentInput, setCommentInput] = useState("");
-  const [commentInputErrors, setCommentInputErrors] = useState<ZodError>();
+  const [commentInputErrors, setCommentInputErrors] = useState<
+    ZodError | TypeError
+  >();
   dayjs.extend(relativeTime);
 
   const commentSchema = z.string().max(150).trim().min(2);
 
+  const comment = trpc.posts.postComment.useMutation();
+
   const postComment = () => {
     try {
-      commentSchema.parse(commentInput);
+      const parsedComment = commentSchema.parse(commentInput);
       setCommentInputErrors(undefined);
+
+      if (typeof id === "string") {
+        console.log(id);
+        comment.mutateAsync(
+          {
+            content: parsedComment,
+            postId: id,
+          },
+          {
+            onSuccess: () => console.log(),
+            onError: (error) => console.log(error),
+          }
+        );
+      } else {
+        throw new TypeError("There was a problem accessing the main post ID");
+      }
     } catch (error) {
-      error instanceof ZodError && setCommentInputErrors(error);
       console.log(error);
+      error instanceof ZodError && setCommentInputErrors(error);
+      error instanceof TypeError && setCommentInputErrors(error);
     }
   };
 
@@ -67,12 +89,17 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
                 : "hidden"
             } easy-in duration-75`}
           >
-            {commentInputErrors &&
+            {commentInputErrors instanceof ZodError &&
               commentInputErrors.errors.map((error, idx) => (
                 <p key={idx} className="text-sm font-[600] text-red-500">
                   {error.message}
                 </p>
               ))}
+            {commentInputErrors instanceof TypeError && (
+              <p className="text-sm font-[600] text-red-500">
+                {commentInputErrors.message}
+              </p>
+            )}
             <button
               onClick={() => {
                 setIsCommentInputActive(false);
