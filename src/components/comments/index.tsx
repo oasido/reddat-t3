@@ -30,6 +30,7 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
 
   const commentSchema = z.string().max(150).trim().min(2);
 
+  const ctx = trpc.useContext();
   const comment = trpc.posts.postComment.useMutation();
 
   const postComment = () => {
@@ -45,7 +46,7 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
             postId: id,
           },
           {
-            onSuccess: () => console.log(),
+            onSuccess: () => ctx.posts.invalidate(),
             onError: (error) => console.log(error),
           }
         );
