@@ -2,14 +2,16 @@ import { router, publicProcedure, protectedProcedure } from "../../trpc";
 import { z } from "zod";
 
 export const postsRouter = router({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.post.findMany({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const response = await ctx.prisma.post.findMany({
       include: {
         subreddit: true,
         author: true,
         PostVote: true,
       },
     });
+
+    return response;
   }),
 
   getBySubreddit: publicProcedure
