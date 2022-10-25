@@ -46,7 +46,7 @@ export const UserMenu = () => {
       <Menu>
         <div className="relative z-10 my-1.5">
           <Menu.Button className="flex w-full cursor-pointer justify-center rounded-lg bg-neutral-800 pl-2 pr-8 text-left text-lg text-white focus:outline-none focus-visible:border-neutral-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-neutral-300 sm:pr-10">
-            <div className="flex  items-center gap-1">
+            <div className="flex items-center gap-1">
               <Image
                 className="rounded-sm"
                 src={
