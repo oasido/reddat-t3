@@ -52,6 +52,9 @@ export const postsRouter = router({
             include: {
               author: true,
             },
+            orderBy: {
+              createdAt: "desc",
+            },
           },
         },
       });
@@ -59,7 +62,7 @@ export const postsRouter = router({
       return response;
     }),
 
-  postComment: protectedProcedure
+  newComment: protectedProcedure
     .input(
       z.object({
         content: z.string().max(150).trim().min(2),
