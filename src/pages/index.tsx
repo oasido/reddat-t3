@@ -4,6 +4,7 @@ import { trpc } from "../utils/trpc";
 import { Container } from "../components/container";
 import { Card } from "../components/card";
 import { Navbar } from "../components/navbar";
+import { NewPostBar } from "../components/new-post-bar";
 
 const Home: NextPage = () => {
   // const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
@@ -35,12 +36,7 @@ const Home: NextPage = () => {
       <Navbar />
 
       <Container>
-        <button
-          onClick={() => handleNewPost()}
-          className="m-2 rounded-full bg-white px-2 py-0.5 font-bold"
-        >
-          New Post
-        </button>
+        <NewPostBar />
         {posts?.map((post) => (
           <Card key={post.id} post={post} />
         ))}
