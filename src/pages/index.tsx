@@ -5,10 +5,12 @@ import { Container } from "../components/container";
 import { Card } from "../components/card";
 import { Navbar } from "../components/navbar";
 import { NewPostBar } from "../components/new-post-bar";
+import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
   // const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
   // const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
+  const { data: sessionData } = useSession();
 
   const { data: posts } = trpc.posts.getAll.useQuery();
 
@@ -36,7 +38,7 @@ const Home: NextPage = () => {
       <Navbar />
 
       <Container>
-        <NewPostBar />
+        {sessionData && <NewPostBar />}
         {posts?.map((post) => (
           <Card key={post.id} post={post} />
         ))}
