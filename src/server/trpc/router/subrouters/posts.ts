@@ -88,6 +88,7 @@ export const postsRouter = router({
   new: protectedProcedure
     .input(
       z.object({
+        subreddit: z.string(),
         title: z.string(),
         content: z.string(),
       })

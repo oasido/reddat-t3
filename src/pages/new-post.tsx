@@ -5,19 +5,29 @@ import { Navbar } from "../components/navbar";
 import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SelectFromSubs } from "../components/new-post/select-from-subs";
+import { z } from "zod";
 
-const NewPost: NextPage = (props) => {
-  const ctx = trpc.useContext();
+const NewPost: NextPage = () => {
+  // const ctx = trpc.useContext();
   const { data: sessionData } = useSession();
   const router = useRouter();
+
+  const [selectedSub, setSelectedSub] = useState("");
+  const [query, setQuery] = useState("");
+
+  const [post, setPost] = useState({
+    subredditId: "",
+    title: "",
+    content: "",
+  });
 
   useEffect(() => {
     if (!sessionData) {
       router.push("/");
     }
-  }, [sessionData]);
+  }, [router, sessionData]);
 
   return (
     <>
@@ -28,13 +38,54 @@ const NewPost: NextPage = (props) => {
       </Head>
 
       <Navbar />
+
       <Container>
         <h2 className="text-xl font-bold text-white">New post</h2>
-        <SelectFromSubs />
-        <textarea className=" w-full rounded-md border-neutral-700 bg-neutral-800 text-white" />
+
+        <SelectFromSubs
+          selectedSub={selectedSub}
+          setSelectedSub={setSelectedSub}
+          query={query}
+          setQuery={setQuery}
+        />
+
+        <input
+          placeholder="Title"
+          className="mb-2 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
+        />
+        <textarea
+          placeholder="Text (required)"
+          className="h-36 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
+        ></textarea>
       </Container>
     </>
   );
 };
 
 export default NewPost;
+
+const newPostSchema = z.object({
+  subredditId: z.string(),
+  title: z.string().min(1).max(140),
+  content: z.string().min(1).max(6000),
+});
+
+const submitNewPost = async ({
+  subredditId,
+  title,
+  content,
+}: z.infer<typeof newPostSchema>) => {
+  const parsedNewPost = newPostSchema.parse({
+    subredditId,
+    title,
+    content,
+  });
+
+  // const { data } = await trpc.posts.new.useMutation({
+  //   subredditId,
+  //   title,
+  //   content,
+  // });
+
+  // router.push(`/r/${data.subreddit.name}/${data.id}`);
+};
