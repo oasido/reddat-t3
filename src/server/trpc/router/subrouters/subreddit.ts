@@ -3,7 +3,13 @@ import { z } from "zod";
 
 export const subredditRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.subreddit.findMany();
+    return ctx.prisma.subreddit.findMany({
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      },
+    });
   }),
 
   getOne: publicProcedure
