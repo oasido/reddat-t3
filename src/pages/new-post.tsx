@@ -6,6 +6,7 @@ import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { SelectFromSubs } from "../components/new-post/select-from-subs";
 
 const NewPost: NextPage = (props) => {
   const ctx = trpc.useContext();
@@ -29,6 +30,7 @@ const NewPost: NextPage = (props) => {
       <Navbar />
       <Container>
         <h2 className="text-xl font-bold text-white">New post</h2>
+        <SelectFromSubs />
         <textarea className=" w-full rounded-md border-neutral-700 bg-neutral-800 text-white" />
       </Container>
     </>
