@@ -2,21 +2,28 @@ import { Combobox, Transition } from "@headlessui/react";
 import { trpc } from "../../utils/trpc";
 import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
+
+export type selectedSub =
+  | {
+      id: string;
+      name: string;
+      image: string | null;
+    }
+  | undefined;
 
 type SelectFromSubsProps = {
-  selectedSub: string;
-  setSelectedSub: (sub: string) => void;
-  query: string;
-  setQuery: (query: string) => void;
+  selectedSub: selectedSub;
+  setSelectedSub: (sub: selectedSub) => void;
 };
 
 export const SelectFromSubs = ({
   selectedSub,
   setSelectedSub,
-  query,
-  setQuery,
 }: SelectFromSubsProps) => {
   const { data: subreddits } = trpc.subreddit.getAll.useQuery();
+
+  const [query, setQuery] = useState("");
 
   const filteredSubs =
     query === ""
@@ -27,7 +34,13 @@ export const SelectFromSubs = ({
 
   return (
     <div className="mt-4 mb-2 w-full rounded-sm border border-transparent hover:border-neutral-500/50 sm:w-64">
-      <Combobox nullable value={selectedSub} onChange={setSelectedSub}>
+      <Combobox
+        nullable
+        value={selectedSub?.name}
+        onChange={(selected) => {
+          setSelectedSub(subreddits?.find(({ name }) => name === selected));
+        }}
+      >
         <Combobox.Button
           as="div"
           className="relative rounded-md border border-none border-neutral-700 outline-none ring-0"

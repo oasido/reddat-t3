@@ -2,23 +2,22 @@ import Head from "next/head";
 import { NextPage } from "next";
 import { Container } from "../components/container";
 import { Navbar } from "../components/navbar";
-import { trpc } from "../utils/trpc";
+// import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { SelectFromSubs } from "../components/new-post/select-from-subs";
 import { z } from "zod";
+import type { selectedSub } from "../components/new-post/select-from-subs";
 
 const NewPost: NextPage = () => {
   // const ctx = trpc.useContext();
   const { data: sessionData } = useSession();
   const router = useRouter();
 
-  const [selectedSub, setSelectedSub] = useState("");
-  const [query, setQuery] = useState("");
+  const [selectedSub, setSelectedSub] = useState<selectedSub>();
 
   const [post, setPost] = useState({
-    subredditId: "",
     title: "",
     content: "",
   });
@@ -45,15 +44,21 @@ const NewPost: NextPage = () => {
         <SelectFromSubs
           selectedSub={selectedSub}
           setSelectedSub={setSelectedSub}
-          query={query}
-          setQuery={setQuery}
         />
 
         <input
+          value={post.title}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setPost({ ...post, title: event.target.value })
+          }
           placeholder="Title"
           className="mb-2 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
         />
         <textarea
+          value={post.content}
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+            setPost({ ...post, title: event.target.value })
+          }
           placeholder="Text (required)"
           className="h-36 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
         ></textarea>
