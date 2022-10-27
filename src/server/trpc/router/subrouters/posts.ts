@@ -64,6 +64,29 @@ export const postsRouter = router({
       return response;
     }),
 
+  newPost: protectedProcedure
+    .input(
+      z.object({
+        subredditId: z.string(),
+        title: z.string(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.prisma.post.create({
+          data: {
+            title: input.title,
+            content: input.content,
+            subredditId: input.subredditId,
+            authorId: ctx.session.user.id,
+          },
+        });
+      } catch (error) {
+        console.log("error", error);
+      }
+    }),
+
   newComment: protectedProcedure
     .input(
       z.object({
@@ -82,29 +105,6 @@ export const postsRouter = router({
         });
       } catch (error) {
         console.error(error);
-      }
-    }),
-
-  new: protectedProcedure
-    .input(
-      z.object({
-        subreddit: z.string(),
-        title: z.string(),
-        content: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      try {
-        return await ctx.prisma.post.create({
-          data: {
-            title: input.title,
-            content: input.content,
-            subredditId: "cl9bfmp0k0000utl9nnh9fq1y",
-            authorId: ctx.session.user.id,
-          },
-        });
-      } catch (error) {
-        console.log("error", error);
       }
     }),
 

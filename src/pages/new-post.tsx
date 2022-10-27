@@ -9,6 +9,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { SelectFromSubs } from "../components/new-post/select-from-subs";
 import { z } from "zod";
 import type { selectedSub } from "../components/new-post/select-from-subs";
+import { trpc } from "../utils/trpc";
 
 const NewPost: NextPage = () => {
   // const ctx = trpc.useContext();
@@ -57,14 +58,23 @@ const NewPost: NextPage = () => {
         <textarea
           value={post.content}
           onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-            setPost({ ...post, title: event.target.value })
+            setPost({ ...post, content: event.target.value })
           }
           placeholder="Text (required)"
           className="h-36 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
         ></textarea>
         <div className="align-items flex justify-end">
           Test
-          <button className="my-2 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100">
+          <button
+            onClick={() =>
+              submitNewPost({
+                subredditId: selectedSub?.id ?? "",
+                title: post.title,
+                content: post.content,
+              })
+            }
+            className="my-2 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+          >
             Submit New Post
           </button>
         </div>
@@ -86,11 +96,15 @@ const submitNewPost = async ({
   title,
   content,
 }: z.infer<typeof newPostSchema>) => {
-  const parsedNewPost = newPostSchema.parse({
-    subredditId,
-    title,
-    content,
-  });
+  try {
+    const parsedPost = newPostSchema.parse({ subredditId, title, content });
+
+    const newPost = trpc.posts.newPost.useMutation();
+    const response = await newPost.mutateAsync(parsedPost);
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
 
   // const { data } = await trpc.posts.new.useMutation({
   //   subredditId,
