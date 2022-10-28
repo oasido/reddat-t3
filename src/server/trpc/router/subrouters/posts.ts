@@ -9,6 +9,9 @@ export const postsRouter = router({
         author: true,
         PostVote: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return response;
@@ -68,8 +71,8 @@ export const postsRouter = router({
     .input(
       z.object({
         subredditId: z.string(),
-        title: z.string(),
-        content: z.string(),
+        title: z.string().min(3).max(140),
+        content: z.string().max(6000),
       })
     )
     .mutation(async ({ ctx, input }) => {

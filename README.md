@@ -17,19 +17,20 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 - [x] Dark mode
 - [x] Mobile friendly
 - [x] User avatars & placeholders (using [dicebear](https://avatars.dicebear.com/))
-- [x] Ability to create new comments
 
 ### 🚧 Roadmap
 
-- [ ] Ability create new posts
+- [ ] Ability to join subreddits
 - [ ] Ability to create new subreddits
 - [ ] User settings
-- [ ] User profile
+- [ ] User profile (& User moderation: ability to remove posts/comments)
 - [ ] Subreddit moderation tools
 - [ ] Pagination/Infinite scrolling
 - [ ] User badges
 - [ ] Search
 - [ ] Sorting
+- [ ] Ability to edit posts
+- [ ] Ability to edit comments
 - [ ] User notifications
 
 <!-- ### [Live demo](https://reddat.ofekasido.xyz/) -->

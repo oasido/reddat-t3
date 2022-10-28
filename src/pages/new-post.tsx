@@ -2,32 +2,79 @@ import Head from "next/head";
 import { NextPage } from "next";
 import { Container } from "../components/container";
 import { Navbar } from "../components/navbar";
-// import { trpc } from "../utils/trpc";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { SelectFromSubs } from "../components/new-post/select-from-subs";
 import { z } from "zod";
 import type { selectedSub } from "../components/new-post/select-from-subs";
 import { trpc } from "../utils/trpc";
+import { useRouter } from "next/router";
+// import { useSession } from "next-auth/react";
+import { PostContent } from "../components/new-post/post-content";
+
+const newPostSchema = z.object({
+  subredditId: z.string().min(5, { message: "Please select a subreddit" }),
+  title: z
+    .string()
+    .min(3, { message: "Title must have at least 3 characters" })
+    .max(140),
+  content: z.string().max(6000, { message: "Your post is too long, chap!" }),
+});
+
+export type NewPostErrors = {
+  subredditId?: string[] | undefined;
+  title?: string[] | undefined;
+  content?: string[] | undefined;
+};
 
 const NewPost: NextPage = () => {
-  // const ctx = trpc.useContext();
-  const { data: sessionData } = useSession();
+  // const { data: sessionData } = useSession();
   const router = useRouter();
 
   const [selectedSub, setSelectedSub] = useState<selectedSub>();
+  const [errors, setErrors] = useState<NewPostErrors>();
 
   const [post, setPost] = useState({
     title: "",
     content: "",
   });
 
-  useEffect(() => {
-    if (!sessionData) {
-      router.push("/");
+  const newPost = trpc.posts.newPost.useMutation();
+
+  const submitNewPost = async ({
+    subredditId,
+    title,
+    content,
+  }: z.infer<typeof newPostSchema>) => {
+    typeof subredditId === "undefined" &&
+      new Error("Subreddit ID must be a string");
+
+    const parsedPost = newPostSchema.safeParse({
+      subredditId,
+      title,
+      content,
+    });
+
+    if (parsedPost.success) {
+      setErrors(undefined);
+      await newPost.mutateAsync(
+        {
+          subredditId,
+          title,
+          content,
+        },
+        {
+          onSuccess: () => {
+            setPost({ title: "", content: "" });
+            setSelectedSub(undefined);
+            router.push("/");
+          },
+          onError: (error) => console.log(error),
+        }
+      );
+    } else {
+      setErrors(parsedPost.error.flatten().fieldErrors);
     }
-  }, [router, sessionData]);
+  };
 
   return (
     <>
@@ -40,31 +87,14 @@ const NewPost: NextPage = () => {
       <Navbar />
 
       <Container>
-        <h2 className="text-xl font-bold text-white">New post</h2>
-
+        <h2 className="mb-4 text-xl font-bold text-white">New post</h2>
         <SelectFromSubs
           selectedSub={selectedSub}
           setSelectedSub={setSelectedSub}
+          errors={errors?.subredditId}
         />
-
-        <input
-          value={post.title}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setPost({ ...post, title: event.target.value })
-          }
-          placeholder="Title"
-          className="mb-2 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
-        />
-        <textarea
-          value={post.content}
-          onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-            setPost({ ...post, content: event.target.value })
-          }
-          placeholder="Text (required)"
-          className="h-36 w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200"
-        ></textarea>
-        <div className="align-items flex justify-end">
-          Test
+        <PostContent post={post} setPost={setPost} errors={errors} />
+        <div className="flex justify-end">
           <button
             onClick={() =>
               submitNewPost({
@@ -73,9 +103,9 @@ const NewPost: NextPage = () => {
                 content: post.content,
               })
             }
-            className="my-2 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+            className="my-3 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
           >
-            Submit New Post
+            Post
           </button>
         </div>
       </Container>
@@ -84,33 +114,3 @@ const NewPost: NextPage = () => {
 };
 
 export default NewPost;
-
-const newPostSchema = z.object({
-  subredditId: z.string(),
-  title: z.string().min(1).max(140),
-  content: z.string().min(1).max(6000),
-});
-
-const submitNewPost = async ({
-  subredditId,
-  title,
-  content,
-}: z.infer<typeof newPostSchema>) => {
-  try {
-    const parsedPost = newPostSchema.parse({ subredditId, title, content });
-
-    const newPost = trpc.posts.newPost.useMutation();
-    const response = await newPost.mutateAsync(parsedPost);
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
-
-  // const { data } = await trpc.posts.new.useMutation({
-  //   subredditId,
-  //   title,
-  //   content,
-  // });
-
-  // router.push(`/r/${data.subreddit.name}/${data.id}`);
-};
