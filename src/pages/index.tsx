@@ -8,24 +8,9 @@ import { NewPostBar } from "../components/new-post-bar";
 import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
-  // const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
-  // const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
   const { data: sessionData } = useSession();
 
   const { data: posts } = trpc.posts.getAll.useQuery();
-
-  const ctx = trpc.useContext();
-
-  const newPost = trpc.posts.new.useMutation({
-    onSuccess: () => ctx.posts.invalidate(),
-  });
-
-  const handleNewPost = () => {
-    newPost.mutateAsync({
-      title: "This is another post title!",
-      content: "Lorem Ipsum",
-    });
-  };
 
   return (
     <>

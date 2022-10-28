@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, FC } from "react";
 import { NewPostErrors } from "../../pages/new-post";
 
 type PostContent = {
@@ -10,7 +10,11 @@ type PostContent = {
   errors?: NewPostErrors;
 };
 
-export const PostContent = ({ post, setPost, errors }: PostContent) => {
+export const PostContent: FC<PostContent> = ({
+  post,
+  setPost,
+  errors,
+}): JSX.Element => {
   return (
     <>
       <div className="my-4 flex flex-col">

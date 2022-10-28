@@ -2,14 +2,14 @@ import Head from "next/head";
 import { NextPage } from "next";
 import { Container } from "../components/container";
 import { Navbar } from "../components/navbar";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { SelectFromSubs } from "../components/new-post/select-from-subs";
 import { z } from "zod";
 import type { selectedSub } from "../components/new-post/select-from-subs";
 import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";
-// import { useSession } from "next-auth/react";
 import { PostContent } from "../components/new-post/post-content";
+// import { useSession } from "next-auth/react";
 
 const newPostSchema = z.object({
   subredditId: z.string().min(5, { message: "Please select a subreddit" }),
