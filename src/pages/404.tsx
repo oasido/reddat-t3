@@ -10,7 +10,7 @@ const FourOhFour = () => {
       <Head>
         <title>{`Reddat - 404`}</title>
         <meta name="description" content="Reddat: A Reddit Clone by oasido" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
       <Navbar />

@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Reddat: Reddit clone by github.com/oasido</title>
         <meta name="description" content="Reddat: A Reddit Clone by oasido" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
       <Navbar />

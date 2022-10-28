@@ -43,7 +43,7 @@ const Post: NextPage = ({
       <Head>
         <title>{`r/${params.slug} - Reddat`}</title>
         <meta name="description" content="Reddat: A Reddit Clone by oasido" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
       <Navbar />
