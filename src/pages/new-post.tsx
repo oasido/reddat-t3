@@ -21,9 +21,9 @@ const newPostSchema = z.object({
 });
 
 export type NewPostErrors = {
-  subredditId?: string[] | undefined;
-  title?: string[] | undefined;
-  content?: string[] | undefined;
+  subredditId?: string[];
+  title?: string[];
+  content?: string[];
 };
 
 const NewPost: NextPage = () => {
