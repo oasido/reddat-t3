@@ -24,9 +24,10 @@ export default defineNextConfig({
   images: {
     domains: [
       "avatars.dicebear.com",
-      "github.com",
       "avatars.githubusercontent.com",
       "www.redditstatic.com",
+      "images.unsplash.com",
+      "github.com",
     ],
   },
 });
