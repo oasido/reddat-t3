@@ -39,7 +39,6 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
       setCommentInputErrors(undefined);
 
       if (typeof id === "string") {
-        console.log(id);
         comment.mutateAsync(
           {
             content: parsedComment,
