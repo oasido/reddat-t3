@@ -132,6 +132,9 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
                 comment={comment}
               />
             ))}
+          {post && post.comments.length === 0 && (
+            <h3 className="my-7 text-center text-gray-400">No comments.</h3>
+          )}
         </div>
       </div>
     </Link>
