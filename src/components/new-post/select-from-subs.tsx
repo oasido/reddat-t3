@@ -35,8 +35,8 @@ export const SelectFromSubs = ({
         });
 
   return (
-    <div className="my-4 w-full rounded-sm border border-transparent hover:border-neutral-500/50 sm:w-64">
-      <div>
+    <div className="my-4">
+      <div className="w-full rounded-md border border-transparent hover:border-neutral-500/50 sm:w-64">
         <Combobox
           nullable
           value={selectedSub?.name}
@@ -46,12 +46,14 @@ export const SelectFromSubs = ({
         >
           <Combobox.Button
             as="div"
-            className="relative rounded-md border border-none border-neutral-700 outline-none ring-0"
+            className={`relative rounded-md border-neutral-700 outline-none ring-0 ${
+              errors ? "border-2 border-red-600" : "border-transparent"
+            }`}
           >
             <Combobox.Input
               placeholder="Select a subreddit"
               onChange={(event) => setQuery(event.target.value)}
-              className="w-full bg-neutral-800 p-3 py-2 pl-3 pr-10 text-gray-200 hover:cursor-pointer hover:border-neutral-500"
+              className="w-full rounded-md bg-neutral-800 p-3 py-2 pl-3 pr-10 text-gray-200 hover:cursor-pointer hover:border-neutral-500"
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronDownIcon
