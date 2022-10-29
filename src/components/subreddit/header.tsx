@@ -14,14 +14,14 @@ export const SubredditHeader = ({
   isAdmin,
 }: SubredditHeaderProps): JSX.Element => {
   return (
-    <div className="relative h-52 bg-neutral-800">
+    <div className="relative h-56 bg-neutral-800">
       <div className="h-32 bg-red-500 align-baseline" />
-      <div className="absolute left-6 bottom-6">
+      <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end">
           <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
           <div>
             <div className="flex items-end">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-gray-200">
                 {subreddit?.title ?? slug}
               </h2>
               {isAdmin && (
