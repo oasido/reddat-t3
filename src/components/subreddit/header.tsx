@@ -1,4 +1,7 @@
 import { Subreddit, SubredditModerator } from "@prisma/client";
+import { trpc } from "../../utils/trpc";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 type SubredditHeaderProps = {
   slug: string;
@@ -6,13 +9,37 @@ type SubredditHeaderProps = {
     moderators: SubredditModerator[];
   };
   isAdmin?: boolean;
+  isSubscribed?: boolean;
 };
 
 export const SubredditHeader = ({
   slug,
   subreddit,
   isAdmin,
+  isSubscribed,
 }: SubredditHeaderProps): JSX.Element => {
+  const { data: sessionData } = useSession();
+
+  const [subcribe, setSubscribe] = useState(isSubscribed);
+
+  const joinSub = trpc.subreddit.join.useMutation();
+  const ctx = trpc.useContext();
+
+  const handleJoinButton = async () => {
+    setSubscribe(!subcribe);
+    await joinSub.mutateAsync(
+      {
+        subredditId: subreddit?.id ?? "",
+        userId: sessionData?.user?.id ?? "",
+      },
+      {
+        onSuccess: () => {
+          ctx.subreddit.invalidate();
+        },
+      }
+    );
+  };
+
   return (
     <div className="relative h-56 bg-neutral-800">
       <div className="h-32 bg-red-500 align-baseline" />
@@ -24,6 +51,12 @@ export const SubredditHeader = ({
               <h2 className="text-2xl font-bold text-gray-200">
                 {subreddit?.title ?? slug}
               </h2>
+              <button
+                onClick={handleJoinButton}
+                className="ml-4 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+              >
+                {subcribe ? "Joined" : "Join"}
+              </button>
               {isAdmin && (
                 <span
                   title="Click to moderate this subreddit"

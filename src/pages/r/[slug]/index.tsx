@@ -48,6 +48,11 @@ const SubredditPage: NextPage = ({
     subredditName: slug,
   });
 
+  const { data: subscribedToSubreddits } =
+    trpc.subreddit.getUserSubscriptions.useQuery({
+      userId: sessionData?.user?.id ?? "",
+    });
+
   if (subreddit === null) return <SubredditNotFound slug={slug} />;
 
   const isAdmin = () => {
@@ -57,6 +62,13 @@ const SubredditPage: NextPage = ({
     )
       ? true
       : false;
+  };
+
+  const isSubscribed = () => {
+    const isFound = subscribedToSubreddits?.subreddits.find(
+      (sub) => sub.subredditId === subreddit?.id
+    );
+    return isFound ? true : false;
   };
 
   return (
@@ -69,7 +81,12 @@ const SubredditPage: NextPage = ({
 
       <Navbar />
 
-      <SubredditHeader slug={slug} subreddit={subreddit} isAdmin={isAdmin()} />
+      <SubredditHeader
+        slug={slug}
+        subreddit={subreddit}
+        isAdmin={isAdmin()}
+        isSubscribed={isSubscribed()}
+      />
 
       <Container sidebar={<Sidebar subreddit={subreddit} slug={slug} />}>
         {subreddit || posts ? (

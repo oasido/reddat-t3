@@ -50,7 +50,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
-    subreddits Subreddit[]
+    subreddits SubredditSubscriptions[]
     posts      Post[]
     comments   Comment[]
 
@@ -71,7 +71,17 @@ model Subreddit {
 
     posts Post[]
 
-    users User[]
+    users SubredditSubscriptions[]
+}
+
+model SubredditSubscriptions {
+    subreddit   Subreddit @relation(fields: [subredditId], references: [id])
+    subredditId String
+    user        User      @relation(fields: [userId], references: [id])
+    userId      String
+    joinedAt    DateTime  @default(now())
+
+    @@id([subredditId, userId])
 }
 
 model SubredditModerator {

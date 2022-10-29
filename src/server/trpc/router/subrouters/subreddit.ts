@@ -30,6 +30,56 @@ export const subredditRouter = router({
       });
     }),
 
+  getUserSubscriptions: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findUnique({
+        where: {
+          id: input.userId,
+        },
+        select: {
+          subreddits: true,
+        },
+      });
+    }),
+
+  join: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        subredditId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const isAlreadyJoined =
+        await ctx.prisma.subredditSubscriptions.findUnique({
+          where: {
+            subredditId_userId: {
+              subredditId: input.subredditId,
+              userId: input.userId,
+            },
+          },
+        });
+
+      if (isAlreadyJoined) {
+        return await ctx.prisma.subredditSubscriptions.delete({
+          where: {
+            subredditId_userId: {
+              subredditId: input.subredditId,
+              userId: input.userId,
+            },
+          },
+        });
+      } else {
+        return await ctx.prisma.subredditSubscriptions.create({
+          data: {
+            subredditId: input.subredditId,
+            userId: input.userId,
+          },
+        });
+      }
+    }),
+
   new: protectedProcedure
     .input(
       z.object({
