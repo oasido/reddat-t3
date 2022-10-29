@@ -32,6 +32,11 @@ const Home: NextPage = () => {
         {posts?.map((post) => (
           <Card key={post.id} post={post} />
         ))}
+        {posts?.length === 0 && (
+          <h2 className="my-36 text-center text-3xl font-[600] text-white">
+            Be the first to post something. {!sessionData && "Login now."}
+          </h2>
+        )}
       </Container>
     </>
   );
