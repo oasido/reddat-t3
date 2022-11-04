@@ -34,7 +34,9 @@ export const Sidebar = ({ subreddit }: SidebarProps): JSX.Element => {
           </div>
 
           <div className="flex flex-col border-y border-gray-400/20 py-2">
-            <h4 className="text-sm text-gray-100">{subreddit?._count.users}</h4>
+            <h4 className="text-sm text-gray-100">
+              {subreddit?._count.users ?? 0}
+            </h4>
             <span className="text-xs text-gray-400">Members</span>
           </div>
         </div>
