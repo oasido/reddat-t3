@@ -1,5 +1,6 @@
 import { Subreddit, SubredditModerator } from "@prisma/client";
 import { trpc } from "../../utils/trpc";
+import { CoverImage } from "./cover-image";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ export const SubredditHeader = ({
 
   return (
     <div className="relative h-56 bg-neutral-800">
-      <div className="h-32 bg-red-500 align-baseline" />
+      <CoverImage />
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end">
           <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
