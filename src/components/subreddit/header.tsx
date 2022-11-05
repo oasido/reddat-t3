@@ -21,7 +21,7 @@ export const SubredditHeader = ({
 }: SubredditHeaderProps): JSX.Element => {
   const { data: sessionData } = useSession();
 
-  console.log(subreddit?.SubredditModerator);
+  const [isOnCooldown, setIsOnCooldown] = useState(false);
 
   const [subscribe, setSubscribe] = useState(isSubscribed);
 
@@ -33,6 +33,7 @@ export const SubredditHeader = ({
   const ctx = trpc.useContext();
 
   const handleJoinButton = async () => {
+    setIsOnCooldown(true);
     setSubscribe(!subscribe);
     await joinSub.mutateAsync(
       {
@@ -48,6 +49,9 @@ export const SubredditHeader = ({
         },
       }
     );
+    setTimeout(() => {
+      setIsOnCooldown(false);
+    }, 1000);
   };
 
   return (
@@ -64,7 +68,12 @@ export const SubredditHeader = ({
               {sessionData && (
                 <button
                   onClick={handleJoinButton}
-                  className="ml-4 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${
+                    isOnCooldown
+                      ? "cursor-wait bg-gray-400"
+                      : "cursor-pointer bg-gray-400 hover:bg-gray-100"
+                  }`}
+                  disabled={isOnCooldown ? true : false}
                 >
                   {subscribe ? "Joined" : "Join"}
                 </button>
