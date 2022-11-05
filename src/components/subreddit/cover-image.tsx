@@ -2,6 +2,7 @@ import Image from "next/image.js";
 import { useEffect, useState } from "react";
 import { env } from "../../env/client.mjs";
 import { z } from "zod";
+import { SubredditModerator } from "@prisma/client";
 
 const UnsplashImageSchema = z
   .object({
@@ -21,7 +22,11 @@ const UnsplashImageSchema = z
 
 const UnsplashResponseSchema = z.array(UnsplashImageSchema);
 
-export const CoverImage = () => {
+export const CoverImage = ({
+  subredditMods,
+}: {
+  subredditMods: SubredditModerator[] | undefined;
+}) => {
   const key = env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
   const [images, setImages] =
     useState<z.infer<typeof UnsplashResponseSchema>>();

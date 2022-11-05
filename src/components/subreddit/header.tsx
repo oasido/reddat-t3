@@ -44,7 +44,7 @@ export const SubredditHeader = ({
 
   return (
     <div className="relative h-56 bg-neutral-800">
-      <CoverImage />
+      <CoverImage subredditMods={subreddit?.moderators} />
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end">
           <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
