@@ -56,6 +56,8 @@ model User {
 
     subredditsModerated SubredditModerator[] @relation("SubMods")
     postVote            PostVote[]
+
+    moderators Subreddit[] @relation("SubMods")
 }
 
 model Subreddit {
@@ -67,11 +69,13 @@ model Subreddit {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime? @updatedAt
 
-    moderators SubredditModerator[]
+    moderators User[] @relation("SubMods")
 
     posts Post[]
 
     users SubredditSubscriptions[]
+
+    SubredditModerator SubredditModerator[]
 }
 
 model SubredditSubscriptions {
