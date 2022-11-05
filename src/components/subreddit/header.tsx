@@ -21,13 +21,14 @@ export const SubredditHeader = ({
 }: SubredditHeaderProps): JSX.Element => {
   const { data: sessionData } = useSession();
 
-  const [subcribe, setSubscribe] = useState(isSubscribed);
+
+  const [subscribe, setSubscribe] = useState(isSubscribed);
 
   const joinSub = trpc.subreddit.join.useMutation();
   const ctx = trpc.useContext();
 
   const handleJoinButton = async () => {
-    setSubscribe(!subcribe);
+    setSubscribe(!subscribe);
     await joinSub.mutateAsync(
       {
         subredditId: subreddit?.id ?? "",
@@ -56,7 +57,7 @@ export const SubredditHeader = ({
                 onClick={handleJoinButton}
                 className="ml-4 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
               >
-                {subcribe ? "Joined" : "Join"}
+                {subscribe ? "Joined" : "Join"}
               </button>
               {isAdmin && (
                 <span
