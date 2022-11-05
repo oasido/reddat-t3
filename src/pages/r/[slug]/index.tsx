@@ -65,7 +65,7 @@ const SubredditPage: NextPage = ({
   };
 
   const isSubscribed = () => {
-    const isFound = subscribedToSubreddits?.subreddits.find(
+    const isFound = subscribedToSubreddits?.subreddits.some(
       (sub) => sub.subredditId === subreddit?.id
     );
     return isFound ? true : false;
