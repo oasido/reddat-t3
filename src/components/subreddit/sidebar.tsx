@@ -4,7 +4,7 @@ import { CakeIcon } from "@heroicons/react/20/solid";
 
 type SidebarProps = {
   subreddit?: Subreddit & {
-    moderators: SubredditModerator[];
+    SubredditModerator: SubredditModerator[];
     _count: {
       users: number;
     };

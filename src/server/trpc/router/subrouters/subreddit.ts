@@ -20,7 +20,7 @@ export const subredditRouter = router({
           name: input.subredditName,
         },
         include: {
-          moderators: true,
+          SubredditModerator: true,
           _count: {
             select: {
               users: true,
@@ -51,18 +51,19 @@ export const subredditRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const isAlreadyJoined =
-        await ctx.prisma.subredditSubscriptions.findUnique({
+      const isAlreadyJoined = await ctx.prisma.subredditSubscription.findUnique(
+        {
           where: {
             subredditId_userId: {
               subredditId: input.subredditId,
               userId: input.userId,
             },
           },
-        });
+        }
+      );
 
       if (isAlreadyJoined) {
-        return await ctx.prisma.subredditSubscriptions.delete({
+        return await ctx.prisma.subredditSubscription.delete({
           where: {
             subredditId_userId: {
               subredditId: input.subredditId,
@@ -71,7 +72,7 @@ export const subredditRouter = router({
           },
         });
       } else {
-        return await ctx.prisma.subredditSubscriptions.create({
+        return await ctx.prisma.subredditSubscription.create({
           data: {
             subredditId: input.subredditId,
             userId: input.userId,

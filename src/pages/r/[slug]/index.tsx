@@ -56,7 +56,7 @@ const SubredditPage: NextPage = ({
   if (subreddit === null) return <SubredditNotFound slug={slug} />;
 
   const isAdmin = () => {
-    return subreddit?.moderators.find(
+    return subreddit?.SubredditModerator.find(
       (moderator: SubredditModerator) =>
         moderator.userId === sessionData?.user?.id
     )

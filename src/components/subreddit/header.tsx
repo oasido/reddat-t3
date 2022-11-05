@@ -7,7 +7,7 @@ import { useState } from "react";
 type SubredditHeaderProps = {
   slug: string;
   subreddit?: Subreddit & {
-    moderators: SubredditModerator[];
+    SubredditModerator: SubredditModerator[];
   };
   isAdmin?: boolean;
   isSubscribed?: boolean;
@@ -21,6 +21,7 @@ export const SubredditHeader = ({
 }: SubredditHeaderProps): JSX.Element => {
   const { data: sessionData } = useSession();
 
+  console.log(subreddit?.SubredditModerator);
 
   const [subscribe, setSubscribe] = useState(isSubscribed);
 
@@ -38,13 +39,16 @@ export const SubredditHeader = ({
         onSuccess: () => {
           ctx.subreddit.invalidate();
         },
+        onError: (error) => {
+          console.log("There was an error: ", error);
+        },
       }
     );
   };
 
   return (
     <div className="relative h-56 bg-neutral-800">
-      <CoverImage subredditMods={subreddit?.moderators} />
+      <CoverImage subredditMods={subreddit?.SubredditModerator} />
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end">
           <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
@@ -53,12 +57,14 @@ export const SubredditHeader = ({
               <h2 className="text-2xl font-bold text-gray-200">
                 {subreddit?.title ?? slug}
               </h2>
-              <button
-                onClick={handleJoinButton}
-                className="ml-4 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
-              >
-                {subscribe ? "Joined" : "Join"}
-              </button>
+              {sessionData && (
+                <button
+                  onClick={handleJoinButton}
+                  className="ml-4 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+                >
+                  {subscribe ? "Joined" : "Join"}
+                </button>
+              )}
               {isAdmin && (
                 <span
                   title="Click to moderate this subreddit"
