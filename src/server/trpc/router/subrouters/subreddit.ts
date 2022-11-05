@@ -51,33 +51,36 @@ export const subredditRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const isAlreadyJoined = await ctx.prisma.subredditSubscription.findUnique(
-        {
-          where: {
-            subredditId_userId: {
-              subredditId: input.subredditId,
-              userId: input.userId,
+      try {
+        const isAlreadyJoined =
+          await ctx.prisma.subredditSubscription.findUnique({
+            where: {
+              subredditId_userId: {
+                subredditId: input.subredditId,
+                userId: input.userId,
+              },
             },
-          },
-        }
-      );
+          });
 
-      if (isAlreadyJoined) {
-        return await ctx.prisma.subredditSubscription.delete({
-          where: {
-            subredditId_userId: {
+        if (isAlreadyJoined) {
+          return await ctx.prisma.subredditSubscription.delete({
+            where: {
+              subredditId_userId: {
+                subredditId: input.subredditId,
+                userId: input.userId,
+              },
+            },
+          });
+        } else {
+          return await ctx.prisma.subredditSubscription.create({
+            data: {
               subredditId: input.subredditId,
               userId: input.userId,
             },
-          },
-        });
-      } else {
-        return await ctx.prisma.subredditSubscription.create({
-          data: {
-            subredditId: input.subredditId,
-            userId: input.userId,
-          },
-        });
+          });
+        }
+      } catch (error) {
+        console.error(error);
       }
     }),
 
