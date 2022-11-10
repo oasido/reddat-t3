@@ -28,13 +28,11 @@ export const HomeSidebar = ({ isLoading }: { isLoading?: boolean }) => {
                   Create Post
                 </button>
               </Link>
-              <button
-                disabled
-                title="Coming soon :)"
-                className="mx-2 cursor-not-allowed rounded-xl border-2 bg-transparent px-3 py-0.5 text-sm font-[600] text-gray-300 hover:bg-gray-500/10"
-              >
-                Create Community
-              </button>
+              <Link href="/new-community">
+                <button className="mx-2 rounded-xl border-2 bg-transparent px-3 py-0.5 text-sm font-[600] text-gray-300 hover:bg-gray-500/10">
+                  Create Community
+                </button>
+              </Link>
             </div>
           )}
         </div>
