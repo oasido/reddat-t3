@@ -94,9 +94,28 @@ export const subredditRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        const isFound = await ctx.prisma.subreddit.findUnique({
+          where: {
+            name: input.name,
+          },
+        });
+
+        if (isFound) {
+          return { msg: "Subreddit already exists" };
+        }
+
+        if (typeof ctx.session.user.id !== "string") {
+          return { msg: "User not found" };
+        }
+
         await ctx.prisma.subreddit.create({
           data: {
             name: input.name,
+            SubredditModerator: {
+              create: {
+                userId: ctx.session.user.id,
+              },
+            },
             description: input.description,
             image: input.image,
           },
@@ -105,4 +124,5 @@ export const subredditRouter = router({
         console.log("error", error);
       }
     }),
+
 });
