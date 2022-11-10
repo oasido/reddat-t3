@@ -18,10 +18,10 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 - [x] Mobile friendly
 - [x] User avatars & placeholders (using [dicebear](https://avatars.dicebear.com/))
 - [x] Ability to join subreddits
+- [x] Ability to create new subreddits
 
 ### 🚧 Roadmap
 
-- [ ] Ability to create new subreddits
 - [ ] User settings
 - [ ] User profile (& User moderation: ability to remove posts/comments)
 - [ ] Subreddit moderation tools
