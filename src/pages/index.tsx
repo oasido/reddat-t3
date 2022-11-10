@@ -25,11 +25,7 @@ const Home: NextPage = () => {
 
       <Navbar />
 
-      <Container
-        sidebar={
-          sessionData ? <HomeSidebar isLoading={isLoading} /> : undefined
-        }
-      >
+      <Container sidebar={<HomeSidebar />}>
         {sessionData && <NewPostBar />}
         {isLoading &&
           numberOfLoadingCards.map((_, idx) => <Card key={idx} isLoading />)}
