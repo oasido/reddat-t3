@@ -1,6 +1,7 @@
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
+import { useSession } from "next-auth/react";
 
 type VotesProps = {
   postId?: string;
@@ -12,6 +13,8 @@ type VotesProps = {
   isLoading?: boolean;
 };
 export const VotesComponent = (props: VotesProps): JSX.Element => {
+  const { data: sessionData } = useSession();
+
   const { postId, userMagnitude, votesCount } = props;
 
   const voteOnPost = trpc.posts.vote.useMutation();
@@ -22,6 +25,7 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
     (newMagnitude: -1 | 0 | 1): MouseEventHandler =>
     async (event) => {
       event.preventDefault();
+      if (!sessionData) return;
 
       setMagnitude(newMagnitude);
 
