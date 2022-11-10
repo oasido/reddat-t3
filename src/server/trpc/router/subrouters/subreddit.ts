@@ -125,4 +125,13 @@ export const subredditRouter = router({
       }
     }),
 
+  getList: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.subreddit.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+      },
+    });
+  }),
 });
