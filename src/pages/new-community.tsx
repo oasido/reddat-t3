@@ -29,8 +29,8 @@ const NewCommunity: NextPage = () => {
   const [community, setCommunity] = useState({
     name: "",
     description: "",
-    image: "",
-    avatar: "",
+    /* image: "", */
+    /* avatar: "", */
   });
 
   const newCommunity = trpc.subreddit.new.useMutation();
@@ -51,6 +51,9 @@ const NewCommunity: NextPage = () => {
           onError: (error) => console.log(error),
         }
       );
+      if (response?.error) {
+        setErrors({ name: [response.msg] });
+      }
     } else {
       setErrors(parsedCommunity.error.flatten().fieldErrors);
     }
@@ -68,26 +71,29 @@ const NewCommunity: NextPage = () => {
 
       <Container>
         <h2 className="mb-4 text-xl font-bold text-white">
-          Create a meow community
+          Create a new community
         </h2>
 
-        <div className="my-3 flex flex-col gap-2">
-          <input
-            value={community.name}
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setCommunity({ ...community, name: event.target.value })
-            }
-            placeholder="Community name"
-            className={`h-fit w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
-              errors?.name ? "border-2 border-red-600" : "border-transparent"
-            }`}
-          />
-          {errors?.name &&
-            errors.name.map((error, idx) => (
-              <p key={idx} className="text-sm font-medium text-red-500">
-                {error}
-              </p>
-            ))}
+        <>
+          <div className="my-4 flex flex-col">
+            <input
+              value={community.name}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setCommunity({ ...community, name: event.target.value })
+              }
+              placeholder="Community name"
+              className={`h-fit w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
+                errors?.name ? "border-2 border-red-600" : "border-transparent"
+              }`}
+            />
+            {errors?.name &&
+              errors.name.map((error, idx) => (
+                <p key={idx} className="text-sm font-medium text-red-500">
+                  {error}
+                </p>
+              ))}
+          </div>
+
           <textarea
             value={community.description}
             onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
@@ -95,7 +101,9 @@ const NewCommunity: NextPage = () => {
             }
             placeholder="Description"
             className={`w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
-              errors?.name ? "border-2 border-red-600" : "border-transparent"
+              errors?.description
+                ? "border-2 border-red-600"
+                : "border-transparent"
             }`}
           />
           {errors?.description &&
@@ -104,11 +112,11 @@ const NewCommunity: NextPage = () => {
                 {error}
               </p>
             ))}
-        </div>
+        </>
 
         <div className="flex justify-end">
           <button
-            onClick={() => handleNewCommunityButton()}
+            onClick={handleNewCommunityButton}
             className="my-3 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
           >
             Create
