@@ -94,7 +94,7 @@ export const subredditRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const isFound = await ctx.prisma.subreddit.findUnique({
+        const isFound = await ctx.prisma.subreddit.findFirst({
           where: {
             name: input.name,
           },
