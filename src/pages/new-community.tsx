@@ -10,9 +10,9 @@ import { useRouter } from "next/router";
 
 const newCommunitySchema = z.object({
   name: z.string().min(3).max(20),
-  description: z.string().min(3).max(100),
-  avatar: z.string().url().optional(),
+  description: z.string().max(100).optional(),
   image: z.string().url().optional(),
+  /* avatar: z.string().url().optional(), */
 });
 
 export type newCommunityErrors = {
@@ -42,11 +42,10 @@ const NewCommunity: NextPage = () => {
         {
           name: parsedCommunity.data.name,
           description: parsedCommunity.data.description,
-          image: parsedCommunity.data.image,
         },
         {
           onSuccess: () => {
-            setCommunity({ name: "", description: "", image: "", avatar: "" });
+            setCommunity({ name: "", description: "" });
             router.push("/");
           },
           onError: (error) => console.log(error),

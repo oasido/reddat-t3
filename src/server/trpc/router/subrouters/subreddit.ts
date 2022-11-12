@@ -87,9 +87,9 @@ export const subredditRouter = router({
   new: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        description: z.string().optional(),
-        image: z.string().optional(),
+        name: z.string().min(3).max(20),
+        description: z.string().max(100).optional(),
+        image: z.string().url().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -101,11 +101,11 @@ export const subredditRouter = router({
         });
 
         if (isFound) {
-          return { msg: "Subreddit already exists" };
+          return { error: true, msg: "Subreddit already exists" };
         }
 
         if (typeof ctx.session.user.id !== "string") {
-          return { msg: "User not found" };
+          return { error: true, msg: "User not found" };
         }
 
         await ctx.prisma.subreddit.create({
