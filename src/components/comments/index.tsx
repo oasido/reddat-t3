@@ -6,6 +6,7 @@ import { SingleComment } from "./single-comment";
 import { useState } from "react";
 import { z, ZodError } from "zod";
 import { trpc } from "../../utils/trpc";
+import { useSession } from "next-auth/react";
 
 type CommentsProps = {
   post?: Post & {
@@ -20,6 +21,7 @@ type CommentsProps = {
 };
 
 export const Comments = ({ post }: CommentsProps): JSX.Element => {
+  const { data: sessionData } = useSession();
   const { id, subreddit } = post ?? {};
   const [isCommentInputActive, setIsCommentInputActive] = useState(false);
   const [commentInput, setCommentInput] = useState("");
@@ -69,7 +71,10 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
         <div className="border-b-2 border-b-neutral-600/60">
           <div className="flex justify-center">
             <textarea
-              placeholder="What are your thoughts?"
+              disabled={sessionData ? false : true}
+              placeholder={
+                sessionData ? "What are your thoughts?" : "Login to comment"
+              }
               onClick={() => setIsCommentInputActive(true)}
               value={commentInput}
               onChange={(evt) => {
