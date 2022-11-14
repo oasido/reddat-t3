@@ -13,13 +13,22 @@ import { SubredditNotFound } from "../../../components/subreddit/scenarios/not-f
 import { trpc } from "../../../utils/trpc";
 import { Sidebar } from "../../../components/subreddit/sidebar";
 import { SubredditModerator } from "@prisma/client";
+import { prisma } from "../../../server/db/client";
 
 export type SlugType = {
   slug: string;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (typeof context?.params?.slug === "undefined") {
+  const slug = context.params?.slug as string;
+
+  const subreddit = await prisma.subreddit.findFirst({
+    where: {
+      name: slug,
+    },
+  });
+
+  if (subreddit === null) {
     return {
       redirect: {
         destination: "/",
@@ -30,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      slug: context?.params?.slug,
+      slug,
     },
   };
 };
