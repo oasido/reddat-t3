@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (subreddit === null) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/404",
         permanent: false,
       },
     };
