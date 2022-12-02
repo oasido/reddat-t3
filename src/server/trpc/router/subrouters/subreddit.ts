@@ -129,9 +129,11 @@ export const subredditRouter = router({
     return await ctx.prisma.subreddit.findMany({
       select: {
         id: true,
+        title: true,
         name: true,
         description: true,
       },
+      take: 5,
     });
   }),
 });
