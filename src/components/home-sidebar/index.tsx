@@ -1,9 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { trpc } from "../../utils/trpc";
+import { CommunityButton } from "./community-button";
 
 export const HomeSidebar = ({ isLoading }: { isLoading?: boolean }) => {
   const { data: sessionData } = useSession();
+
+  const { data: communities, isLoading: isCommunityListLoading } =
+    trpc.subreddit.getList.useQuery();
+
+  console.log(communities);
 
   return (
     <>
@@ -50,11 +57,13 @@ export const HomeSidebar = ({ isLoading }: { isLoading?: boolean }) => {
             </p>
 
             <div className="my-3 flex flex-col gap-2">
-              <Link href="/r/nextjs">
-                <button className="mx-2 rounded-xl border-2 bg-transparent px-3 py-0.5 text-sm font-[600] text-gray-300 hover:bg-gray-500/10">
-                  Next.js
-                </button>
-              </Link>
+              {communities?.map((community) => (
+                <CommunityButton
+                  key={community.id}
+                  isLoading={isCommunityListLoading}
+                  {...community}
+                />
+              ))}
             </div>
           </div>
         </div>
