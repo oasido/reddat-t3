@@ -125,13 +125,18 @@ export const subredditRouter = router({
       }
     }),
 
-  getList: publicProcedure.query(async ({ ctx }) => {
+  getTop: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.subreddit.findMany({
       select: {
         id: true,
         title: true,
         name: true,
         description: true,
+      },
+      orderBy: {
+        users: {
+          _count: "desc",
+        },
       },
       take: 5,
     });

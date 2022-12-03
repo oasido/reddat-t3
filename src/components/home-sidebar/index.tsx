@@ -8,9 +8,8 @@ export const HomeSidebar = ({ isLoading }: { isLoading?: boolean }) => {
   const { data: sessionData } = useSession();
 
   const { data: communities, isLoading: isCommunityListLoading } =
-    trpc.subreddit.getList.useQuery();
+    trpc.subreddit.getTop.useQuery();
 
-  console.log(communities);
 
   return (
     <>
