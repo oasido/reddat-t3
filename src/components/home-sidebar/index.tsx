@@ -10,6 +10,7 @@ export const HomeSidebar = ({ isLoading }: { isLoading?: boolean }) => {
   const { data: communities, isLoading: isCommunityListLoading } =
     trpc.subreddit.getTop.useQuery();
 
+  const numberOfLoadingCommunities = [1, 2, 3, 4, 5];
 
   return (
     <>
@@ -63,6 +64,10 @@ export const HomeSidebar = ({ isLoading }: { isLoading?: boolean }) => {
                   {...community}
                 />
               ))}
+              {isCommunityListLoading &&
+                numberOfLoadingCommunities.map((_, idx) => (
+                  <CommunityButton key={idx} isLoading={true} />
+                ))}
             </div>
           </div>
         </div>
