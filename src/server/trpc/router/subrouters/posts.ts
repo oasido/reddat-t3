@@ -2,20 +2,31 @@ import { router, publicProcedure, protectedProcedure } from "../../trpc";
 import { z } from "zod";
 
 export const postsRouter = router({
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    const response = await ctx.prisma.post.findMany({
-      include: {
-        subreddit: true,
-        author: true,
-        PostVote: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+  getAll: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 20;
+      const { cursor } = input;
+      const response = await ctx.prisma.post.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        include: {
+          subreddit: true,
+          author: true,
+          PostVote: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
-    return response;
-  }),
+      return response;
+    }),
 
   getBySubreddit: publicProcedure
     .input(

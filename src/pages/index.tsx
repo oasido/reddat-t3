@@ -11,7 +11,9 @@ import { HomeSidebar } from "../components/home-sidebar";
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
 
-  const { data: posts, isLoading } = trpc.posts.getAll.useQuery();
+  const { data: posts, isLoading } = trpc.posts.getAll.useQuery({
+    limit: 10,
+  });
 
   const numberOfLoadingCards = [1, 2, 3, 4, 5];
 
