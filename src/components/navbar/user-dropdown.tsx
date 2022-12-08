@@ -26,7 +26,7 @@ const menuItems: MenuItem[] = [
   },
   {
     label: "User Settings",
-    href: "", // "/settings"
+    href: "/settings", // "/settings"
     icon: <ArrowTrendingUpIcon className="h-4 w-4" />,
   },
   {
