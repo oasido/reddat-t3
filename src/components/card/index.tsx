@@ -1,15 +1,16 @@
 import { ChatBubbleBottomCenterIcon } from "@heroicons/react/20/solid";
-import { TitleAndBody } from "./title-and-body";
-import { Footer } from "./footer";
-import { Header } from "./header";
-import { VotesComponent } from "./votes-component";
-import { Post, User, PostVote, Subreddit } from "@prisma/client";
-import Link from "next/link";
+import { Post, PostVote, Subreddit, User } from "@prisma/client";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Link from "next/link";
+import { Footer } from "./footer";
+import { Header } from "./header";
+import { TitleAndBody } from "./title-and-body";
+import { VotesComponent } from "./votes-component";
 
 type PostCardProps = {
   post?: Post & {
+    id: string;
     PostVote: PostVote[];
     subreddit: Subreddit;
     author: User;

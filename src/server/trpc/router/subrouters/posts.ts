@@ -1,18 +1,18 @@
-import { router, publicProcedure, protectedProcedure } from "../../trpc";
 import { z } from "zod";
+import { protectedProcedure, publicProcedure, router } from "../../trpc";
 
 export const postsRouter = router({
   getAll: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().nullish(),
+        cursor: z.string().nullish(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input, ctx }) => {
       const limit = input.limit ?? 20;
       const { cursor } = input;
-      const response = await ctx.prisma.post.findMany({
+      const posts = await ctx.prisma.post.findMany({
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,
         include: {
@@ -25,7 +25,14 @@ export const postsRouter = router({
         },
       });
 
-      return response;
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (posts.length > limit) {
+        const nextPost = posts.pop();
+        nextCursor = nextPost!.id;
+      }
+
+      return { posts, nextCursor };
     }),
 
   getBySubreddit: publicProcedure
