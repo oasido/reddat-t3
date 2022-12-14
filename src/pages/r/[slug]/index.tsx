@@ -77,7 +77,7 @@ const SubredditPage: NextPage = ({
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   const { data: subscribedToSubreddits } =
     trpc.subreddit.getUserSubscriptions.useQuery({
