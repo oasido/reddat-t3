@@ -39,10 +39,16 @@ export const postsRouter = router({
     .input(
       z.object({
         subredditName: z.string(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
       })
     )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.post.findMany({
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 20;
+      const { cursor } = input;
+      const posts = await ctx.prisma.post.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
         where: {
           subreddit: {
             name: input.subredditName,
@@ -54,6 +60,15 @@ export const postsRouter = router({
           PostVote: true,
         },
       });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (posts.length > limit) {
+        const nextPost = posts.pop();
+        nextCursor = nextPost!.id;
+      }
+
+      return { posts, nextCursor };
     }),
 
   getOne: publicProcedure

@@ -1,3 +1,4 @@
+import { SubredditModerator } from "@prisma/client";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -5,15 +6,16 @@ import {
 } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { Card } from "../../../components/card";
 import { Container } from "../../../components/container";
 import { Navbar } from "../../../components/navbar";
 import { SubredditHeader } from "../../../components/subreddit/header";
 import { SubredditNotFound } from "../../../components/subreddit/scenarios/not-found";
-import { trpc } from "../../../utils/trpc";
 import { Sidebar } from "../../../components/subreddit/sidebar";
-import { SubredditModerator } from "@prisma/client";
 import { prisma } from "../../../server/db/client";
+import { trpc } from "../../../utils/trpc";
 
 export type SlugType = {
   slug: string;
@@ -53,9 +55,29 @@ const SubredditPage: NextPage = ({
     subredditName: slug,
   });
 
-  const { data: posts } = trpc.posts.getBySubreddit.useQuery({
-    subredditName: slug,
-  });
+  const { ref, inView } = useInView();
+
+  const {
+    data: posts,
+    /* isLoading, */
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = trpc.posts.getBySubreddit.useInfiniteQuery(
+    {
+      subredditName: slug,
+      limit: 5,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   const { data: subscribedToSubreddits } =
     trpc.subreddit.getUserSubscriptions.useQuery({
@@ -100,13 +122,24 @@ const SubredditPage: NextPage = ({
       <Container sidebar={<Sidebar subreddit={subreddit} slug={slug} />}>
         {subreddit || posts ? (
           <>
-            {posts?.map((post) => (
-              <Card key={post.id} post={post} />
-            ))}
+            {posts?.pages.map((page) =>
+              page.posts.map((post) => <Card key={post.id} post={post} />)
+            )}
           </>
         ) : (
           [1, 2, 3].map((_, idx) => <Card key={idx} isLoading={true} />)
         )}
+
+        <h3
+          ref={ref}
+          className="my-10 text-center text-2xl font-[600] text-white"
+        >
+          {isFetchingNextPage
+            ? "Loading more..."
+            : hasNextPage
+            ? "Scroll to load more"
+            : "Nothing more to load"}
+        </h3>
       </Container>
     </>
   );
