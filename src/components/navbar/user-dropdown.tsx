@@ -1,14 +1,14 @@
 import { Menu, Transition } from "@headlessui/react";
 import {
-  ArrowTrendingUpIcon,
   ArrowLeftOnRectangleIcon,
-  HomeIcon,
   ChevronUpDownIcon,
+  Cog6ToothIcon,
+  UserIcon,
 } from "@heroicons/react/24/solid";
-import { ReactNode } from "react";
-import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
+import { ReactNode } from "react";
 
 type MenuItem = {
   label: string;
@@ -22,12 +22,12 @@ const menuItems: MenuItem[] = [
   {
     label: "Profile",
     href: "", // "/profile"
-    icon: <HomeIcon className="h-4 w-4" />,
+    icon: <UserIcon className="h-4 w-4" />,
   },
   {
     label: "User Settings",
     href: "/settings", // "/settings"
-    icon: <ArrowTrendingUpIcon className="h-4 w-4" />,
+    icon: <Cog6ToothIcon className="h-4 w-4" />,
   },
   {
     label: "Log Out",
