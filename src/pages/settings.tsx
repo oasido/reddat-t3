@@ -1,9 +1,68 @@
-import { NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { z } from "zod";
 import { Container } from "../components/container";
 import { Navbar } from "../components/navbar";
+import { getServerAuthSession } from "../server/common/get-server-auth-session";
 
-const Settings: NextPage = () => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const sessionData = await getServerAuthSession(context);
+
+  if (sessionData === null) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+const settingsSchema = z.object({
+  email: z.string().email(),
+});
+
+const Settings: NextPage<{ sessionData: Session }> = ({ sessionData }) => {
+  const INITIAL_SETTINGS = {
+    email: sessionData?.user?.email ?? "",
+  };
+  const [settings, setSettings] =
+    useState<z.infer<typeof settingsSchema>>(INITIAL_SETTINGS);
+
+  const [isChanged, setIsChanged] = useState(false);
+
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setSettings({
+      email: sessionData?.user?.email ?? "",
+    });
+  }, [sessionData]);
+
+  useEffect(() => {
+    if (settings.email !== sessionData?.user?.email) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
+  }, [settings, sessionData]);
+
+  const saveSettings = async () => {
+    console.log("savesettings");
+    return settingsSchema.safeParse(settings);
+  };
+
   return (
     <>
       <Head>
@@ -21,14 +80,51 @@ const Settings: NextPage = () => {
         </div>
 
         <div className="flex justify-between">
-          <div>
+          <div className="w-full">
             <h3 className="text-lg font-medium text-zinc-200">Email Address</h3>
-            <p className="text-zinc-500">fake@email.com</p>
+            <input
+              className="bg-transparent text-zinc-500"
+              value={settings.email ?? "No email saved"}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSettings({
+                  email: e.target.value,
+                })
+              }
+              ref={emailRef}
+            />
           </div>
-          <button className="rounded-3xl border-2 border-zinc-200 p-3.5 py-1 font-medium text-zinc-200">
-            Change
+          <button
+            onClick={() => {
+              if (emailRef.current !== null) {
+                emailRef.current.focus();
+              }
+            }}
+            className="rounded-3xl border-2 border-zinc-200 px-3.5 py-1 font-medium text-zinc-200"
+          >
+            {sessionData?.user?.email ? "Change" : "Add"}
           </button>
         </div>
+
+        <div className="my-5 flex justify-center gap-2">
+          <button
+            className={`rounded-3xl border-2 border-zinc-200 px-3.5 py-1 font-medium text-zinc-200`}
+            onClick={() => setSettings(INITIAL_SETTINGS)}
+          >
+            Restore
+          </button>
+          <button
+            onClick={saveSettings}
+            className={`rounded-3xl border-2 border-zinc-200 px-3.5 py-1 font-medium text-zinc-200 ${
+              isChanged && "cursor-pointer bg-green-500 text-black"
+            }`}
+            disabled={!isChanged}
+          >
+            Save
+          </button>
+        </div>
+        {isChanged && (
+          <p className="font-medium text-orange-500">Unsaved changes</p>
+        )}
       </Container>
     </>
   );
