@@ -33,7 +33,7 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 - [ ] Ability to edit comments
 - [ ] User notifications
 
-<!-- ### [Live demo](https://reddat.ofekasido.xyz/) -->
+### [Live demo](https://reddat.oasido.dev/)
 
 <!-- ## 🐳 Usage with Docker
 

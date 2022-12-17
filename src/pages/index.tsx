@@ -33,7 +33,7 @@ const Home: NextPage = () => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   const numberOfLoadingCards = [1, 2, 3, 4, 5];
 
