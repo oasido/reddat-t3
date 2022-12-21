@@ -1,14 +1,14 @@
-import Head from "next/head";
 import { NextPage } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { z } from "zod";
 import { Container } from "../components/container";
 import { Navbar } from "../components/navbar";
-import { useState } from "react";
-import { SelectFromSubs } from "../components/new-post/select-from-subs";
-import { z } from "zod";
-import type { selectedSub } from "../components/new-post/select-from-subs";
-import { trpc } from "../utils/trpc";
-import { useRouter } from "next/router";
 import { PostContent } from "../components/new-post/post-content";
+import type { selectedSub } from "../components/new-post/select-from-subs";
+import { SelectFromSubs } from "../components/new-post/select-from-subs";
+import { trpc } from "../utils/trpc";
 // import { useSession } from "next-auth/react";
 
 const newPostSchema = z.object({
@@ -87,7 +87,12 @@ const NewPost: NextPage = () => {
       <Navbar />
 
       <Container>
-        <h2 className="mb-4 text-xl font-bold text-white">New post</h2>
+        <h1 className="text-2xl text-white">Create Post</h1>
+
+        <div className="my-5 border-b-[1px] border-b-zinc-400">
+          <h2 className="font-bold text-zinc-400">CREATE A POST</h2>
+        </div>
+
         <SelectFromSubs
           selectedSub={selectedSub}
           setSelectedSub={setSelectedSub}
@@ -103,7 +108,7 @@ const NewPost: NextPage = () => {
                 content: post.content,
               })
             }
-            className="my-3 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+            className="my-3 rounded-xl border-2 bg-zinc-200 px-3 py-0.5 font-medium hover:bg-gray-100"
           >
             Post
           </button>

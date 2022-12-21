@@ -1,8 +1,8 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { trpc } from "../../utils/trpc";
-import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
 import { useState } from "react";
+import { trpc } from "../../utils/trpc";
 
 export type selectedSub =
   | {
@@ -53,7 +53,7 @@ export const SelectFromSubs = ({
             <Combobox.Input
               placeholder="Select a subreddit"
               onChange={(event) => setQuery(event.target.value)}
-              className="w-full rounded-md bg-neutral-800 p-3 py-2 pl-3 pr-10 text-gray-200 hover:cursor-pointer hover:border-neutral-500"
+              className="w-full rounded-md bg-neutral-900 p-3 py-2 pl-3 pr-10 text-gray-200 hover:cursor-pointer hover:border-neutral-500"
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronDownIcon
@@ -73,7 +73,7 @@ export const SelectFromSubs = ({
           >
             <Combobox.Options
               className="absolute z-10 mt-1 max-h-60 min-w-fit overflow-auto
-                        rounded-md border border-neutral-700 bg-neutral-800 py-1 text-base shadow-lg
+                        rounded-md border border-neutral-900 bg-neutral-900 py-1 text-base shadow-lg
                         ring-1 ring-black ring-opacity-5 focus:outline-none sm:w-64"
             >
               {filteredSubs?.map((sub) => (
@@ -83,8 +83,8 @@ export const SelectFromSubs = ({
                   className={({ active }) =>
                     `relative cursor-pointer select-none py-1.5 px-6 ${
                       active
-                        ? "bg-neutral-700 text-neutral-300"
-                        : "text-neutral-300"
+                        ? "bg-neutral-800/50 text-zinc-400"
+                        : "text-zinc-400"
                     }`
                   }
                 >
