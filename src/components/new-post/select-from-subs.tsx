@@ -36,10 +36,10 @@ export const SelectFromSubs = ({
 
   return (
     <div className="my-4">
-      <div className="w-full rounded-md border border-transparent hover:border-neutral-500/50 sm:w-64">
+      <div className="w-full rounded-md sm:w-64">
         <Combobox
           nullable
-          value={selectedSub?.name}
+          value={selectedSub?.name ? `r/${selectedSub?.name}` : ""}
           onChange={(selected) => {
             setSelectedSub(subreddits?.find(({ name }) => name === selected));
           }}
