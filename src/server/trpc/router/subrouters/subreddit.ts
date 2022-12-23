@@ -87,7 +87,14 @@ export const subredditRouter = router({
   new: protectedProcedure
     .input(
       z.object({
-        name: z.string().min(3).max(20),
+        name: z
+          .string()
+          .min(2)
+          .max(20)
+          .regex(/^[A-Za-z]+$/, {
+            message:
+              "Community names must only contain English letters, no spaces or symbols.",
+          }),
         description: z.string().max(100).optional(),
         image: z.string().url().optional(),
       })

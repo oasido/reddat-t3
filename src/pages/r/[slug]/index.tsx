@@ -102,6 +102,20 @@ const SubredditPage: NextPage = ({
     return isFound ? true : false;
   };
 
+  const isNoPosts = () => (posts?.pages[0]?.posts.length === 0 ? true : false);
+
+  const showMorePostsPrompt = () => {
+    if (isFetchingNextPage) {
+      return "Loading more...";
+    } else if (hasNextPage) {
+      return "Scroll to load more";
+    } else if (isNoPosts()) {
+      return "No posts here, yet";
+    } else if (!hasNextPage) {
+      return "No more posts";
+    }
+  };
+
   return (
     <>
       <Head>
@@ -134,11 +148,7 @@ const SubredditPage: NextPage = ({
           ref={ref}
           className="my-10 text-center text-2xl font-[600] text-white"
         >
-          {isFetchingNextPage
-            ? "Loading more..."
-            : hasNextPage
-            ? "Scroll to load more"
-            : "Nothing more to load"}
+          {showMorePostsPrompt()}
         </h3>
       </Container>
     </>

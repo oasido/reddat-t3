@@ -23,17 +23,17 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
 
   const makeHandleClick =
     (newMagnitude: -1 | 0 | 1): MouseEventHandler =>
-    async (event) => {
-      event.preventDefault();
-      if (!sessionData) return;
+      async (event) => {
+        event.preventDefault();
+        if (!sessionData) return;
 
-      setMagnitude(newMagnitude);
+        setMagnitude(newMagnitude);
 
-      await voteOnPost.mutateAsync({
-        postId: postId ?? "",
-        magnitude: newMagnitude,
-      });
-    };
+        await voteOnPost.mutateAsync({
+          postId: postId ?? "",
+          magnitude: newMagnitude,
+        });
+      };
 
   useEffect(() => {
     setMagnitude(userMagnitude);
@@ -54,15 +54,14 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
   }
 
   return (
-    <div className="col-span-1 flex flex-col items-center justify-center bg-neutral-900/25 p-2 text-2xl ">
+    <div className="col-span-1 flex flex-col items-center justify-start bg-neutral-900/25 p-2 text-2xl ">
       <button
         onClick={makeHandleClick(magnitude > 0 ? 0 : 1)}
         className="rounded-full p-1.5 hover:bg-gray-200/10"
       >
         <ChevronUpIcon
-          className={`h-6 w-6 ${
-            magnitude > 0 ? "text-red-500" : "text-neutral-500"
-          }`}
+          className={`h-6 w-6 ${magnitude > 0 ? "text-red-500" : "text-neutral-500"
+            }`}
         />
       </button>
       <span className="text-center text-base font-[600] text-gray-200">
@@ -73,9 +72,8 @@ export const VotesComponent = (props: VotesProps): JSX.Element => {
         className="rounded-full p-1.5 hover:bg-gray-200/10"
       >
         <ChevronDownIcon
-          className={`h-6 w-6 ${
-            magnitude < 0 ? "text-red-500" : "text-neutral-500"
-          }`}
+          className={`h-6 w-6 ${magnitude < 0 ? "text-red-500" : "text-neutral-500"
+            }`}
         />
       </button>
     </div>

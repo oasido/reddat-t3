@@ -19,19 +19,24 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 - [x] User avatars & placeholders (using [dicebear](https://avatars.dicebear.com/))
 - [x] Ability to join subreddits
 - [x] Ability to create new subreddits
+- [x] Pagination/Infinite scrolling
 
 ### 🚧 Roadmap
 
 - [ ] User settings
 - [ ] User profile (& User moderation: ability to remove posts/comments)
 - [ ] Subreddit moderation tools
-- [ ] Pagination/Infinite scrolling
 - [ ] User badges
 - [ ] Search
 - [ ] Sorting
 - [ ] Ability to edit posts
 - [ ] Ability to edit comments
 - [ ] User notifications
+
+### 🦺 Currently working on
+
+- [ ] Polish new subreddit page
+- [ ] Add custom Unsplash API, for usage in selecting subs cover images
 
 ### [Live demo](https://reddat.oasido.dev/)
 

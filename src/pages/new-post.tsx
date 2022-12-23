@@ -10,6 +10,7 @@ import type { selectedSub } from "../components/new-post/select-from-subs";
 import { SelectFromSubs } from "../components/new-post/select-from-subs";
 import { trpc } from "../utils/trpc";
 // import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const newPostSchema = z.object({
   subredditId: z.string().min(5, { message: "Please select a subreddit" }),
@@ -101,7 +102,12 @@ const NewPost: NextPage = () => {
 
         <PostContent post={post} setPost={setPost} errors={errors} />
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
+          <Link href="/">
+            <button className="my-3 rounded-xl border-2 bg-transparent px-3 py-0.5 font-medium text-white hover:bg-neutral-500/10">
+              Cancel
+            </button>
+          </Link>
           <button
             onClick={() =>
               submitNewPost({

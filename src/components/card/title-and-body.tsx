@@ -2,12 +2,14 @@ type TitleAndBodyProps = {
   title?: string;
   content?: string;
   isLoading?: boolean;
+  single?: boolean;
 };
 
 export const TitleAndBody = ({
   title,
   content,
   isLoading,
+  single,
 }: TitleAndBodyProps) => {
   return isLoading === true ? (
     <div className="animate-pulse">
@@ -19,9 +21,11 @@ export const TitleAndBody = ({
       <h3 className={`${!title && "italic"} mt-1 text-xl font-bold text-white`}>
         {title ?? `Untitled`}
       </h3>
-      <p className={`${!content && "italic"} text-gray-50`}>
-        {content ?? `This post is empty`}
-      </p>
+      <div className={`${!content && "italic"} text-gray-50`}>
+        <p className={`${!single && "line-clamp-6"} whitespace-pre-wrap`}>
+          {content ?? `This post is empty`}
+        </p>
+      </div>
     </>
   );
 };

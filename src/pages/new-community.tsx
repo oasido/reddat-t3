@@ -7,13 +7,7 @@ import { z } from "zod";
 import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";
 /* import { useSession } from "next-auth/react"; */
-
-const newCommunitySchema = z.object({
-  name: z.string().min(3).max(20),
-  description: z.string().max(100).optional(),
-  image: z.string().url().optional(),
-  /* avatar: z.string().url().optional(), */
-});
+import Link from "next/link";
 
 export type newCommunityErrors = {
   name?: string[];
@@ -26,6 +20,17 @@ const NewCommunity: NextPage = () => {
 
   const [errors, setErrors] = useState<newCommunityErrors>();
 
+  const communitySchema = z.object({
+    name: z
+      .string()
+      .trim()
+      .min(2)
+      .max(20)
+      .regex(/^[A-Za-z]+$/),
+    description: z.string().max(100).optional(),
+    image: z.string().url().optional(),
+  });
+
   const [community, setCommunity] = useState({
     name: "",
     description: "",
@@ -36,7 +41,7 @@ const NewCommunity: NextPage = () => {
   const newCommunity = trpc.subreddit.new.useMutation();
 
   const handleNewCommunityButton = async () => {
-    const parsedCommunity = newCommunitySchema.safeParse(community);
+    const parsedCommunity = communitySchema.safeParse(community);
     if (parsedCommunity.success) {
       const response = await newCommunity.mutateAsync(
         {
@@ -45,8 +50,8 @@ const NewCommunity: NextPage = () => {
         },
         {
           onSuccess: () => {
-            setCommunity({ name: "", description: "" });
-            router.push("/");
+            /* setCommunity({ name: "", description: "" }); */
+            router.push(`/r/${parsedCommunity.data.name}`);
           },
           onError: (error) => console.log(error),
         }
@@ -70,56 +75,69 @@ const NewCommunity: NextPage = () => {
       <Navbar />
 
       <Container>
-        <h2 className="mb-4 text-xl font-bold text-white">
-          Create a new community
-        </h2>
+        <h1 className="text-2xl text-white">Create Community</h1>
 
-        <>
-          <div className="my-4 flex flex-col">
-            <input
-              value={community.name}
-              onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                setCommunity({ ...community, name: event.target.value })
-              }
-              placeholder="Community name"
-              className={`h-fit w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
-                errors?.name ? "border-2 border-red-500" : "border-transparent"
-              }`}
-            />
-            {errors?.name &&
-              errors.name.map((error, idx) => (
-                <p key={idx} className="text-sm font-medium text-red-500">
-                  {error}
-                </p>
-              ))}
+        <div className="my-5 border-b-[1px] border-b-gray-400">
+          <h2 className="font-bold text-gray-400">CREATE A COMMUNITY</h2>
+        </div>
+
+        <div className="my-4 flex flex-col">
+          <div className="flex flex-col">
+            <label className="text-lg font-medium text-white">Name</label>
+            <span className="text-sm text-gray-400">
+              Community names cannot be changed
+            </span>
           </div>
 
-          <textarea
-            value={community.description}
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-              setCommunity({ ...community, description: event.target.value })
+          <span className="relative top-10 left-2.5 w-fit text-lg text-gray-400">
+            r/
+          </span>
+          <input
+            value={community.name}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setCommunity({ ...community, name: event.target.value })
             }
-            placeholder="Description"
-            className={`w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
-              errors?.description
-                ? "border-2 border-red-500"
-                : "border-transparent"
-            }`}
+            className={`w-full rounded-sm border-2 border-transparent bg-reddit py-3 px-7 text-white ${errors?.name ? "border-2 border-red-500" : "border-transparent"
+              }`}
           />
-          {errors?.description &&
-            errors.description.map((error, idx) => (
+
+          {errors?.name &&
+            errors.name.map((error, idx) => (
               <p key={idx} className="text-sm font-medium text-red-500">
                 {error}
               </p>
             ))}
-        </>
+        </div>
 
-        <div className="flex justify-end">
+        <textarea
+          value={community.description}
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+            setCommunity({ ...community, description: event.target.value })
+          }
+          placeholder="Description (optional)"
+          className={`w-full rounded-sm border-2 border-transparent bg-reddit p-3 text-gray-200 ${errors?.description
+              ? "border-2 border-red-500"
+              : "border-transparent"
+            }`}
+        />
+        {errors?.description &&
+          errors.description.map((error, idx) => (
+            <p key={idx} className="text-sm font-medium text-red-500">
+              {error}
+            </p>
+          ))}
+
+        <div className="flex justify-end gap-2">
+          <Link href="/">
+            <button className="my-3 rounded-xl border-2 bg-transparent px-3 py-0.5 font-medium text-white hover:bg-neutral-500/10">
+              Cancel
+            </button>
+          </Link>
           <button
             onClick={handleNewCommunityButton}
-            className="my-3 rounded-xl border-2 bg-gray-300 px-3 py-0.5 text-sm font-[600] hover:bg-gray-100"
+            className="my-3 rounded-xl border-2 bg-gray-200 px-3 py-0.5 font-medium hover:bg-gray-100"
           >
-            Create
+            Create Community
           </button>
         </div>
       </Container>
