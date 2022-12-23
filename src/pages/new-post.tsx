@@ -89,8 +89,8 @@ const NewPost: NextPage = () => {
       <Container>
         <h1 className="text-2xl text-white">Create Post</h1>
 
-        <div className="my-5 border-b-[1px] border-b-zinc-400">
-          <h2 className="font-bold text-zinc-400">CREATE A POST</h2>
+        <div className="my-5 border-b-[1px] border-b-gray-400">
+          <h2 className="font-bold text-gray-400">CREATE A POST</h2>
         </div>
 
         <SelectFromSubs
@@ -98,7 +98,9 @@ const NewPost: NextPage = () => {
           setSelectedSub={setSelectedSub}
           errors={errors?.subredditId}
         />
+
         <PostContent post={post} setPost={setPost} errors={errors} />
+
         <div className="flex justify-end">
           <button
             onClick={() =>
@@ -108,7 +110,7 @@ const NewPost: NextPage = () => {
                 content: post.content,
               })
             }
-            className="my-3 rounded-xl border-2 bg-zinc-200 px-3 py-0.5 font-medium hover:bg-gray-100"
+            className="my-3 rounded-xl border-2 bg-gray-200 px-3 py-0.5 font-medium hover:bg-gray-100"
           >
             Post
           </button>

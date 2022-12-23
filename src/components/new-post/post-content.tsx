@@ -24,8 +24,8 @@ export const PostContent: FC<PostContent> = ({
             setPost({ ...post, title: event.target.value })
           }
           placeholder="Title"
-          className={`w-full rounded-md border-neutral-900 bg-neutral-900 p-3 text-gray-200 ${
-            errors?.title ? "border-2 border-red-600" : "border-transparent"
+          className={`w-full rounded-md bg-reddit p-3 text-gray-200 ${
+            errors?.title ? "border-2 border-red-500" : "border-transparent"
           }`}
         />
         {errors?.title &&
@@ -42,8 +42,8 @@ export const PostContent: FC<PostContent> = ({
           setPost({ ...post, content: event.target.value })
         }
         placeholder="Text (optional)"
-        className={`h-36 w-full rounded-md border-neutral-900 bg-neutral-900 p-3 text-gray-200 ${
-          errors?.content ? "border-2 border-red-600" : "border-transparent"
+        className={`h-36 w-full rounded-md bg-reddit p-3 text-gray-200 ${
+          errors?.content ? "border-2 border-red-500" : "border-transparent"
         }`}
       ></textarea>
 
