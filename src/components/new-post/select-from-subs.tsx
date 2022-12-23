@@ -50,6 +50,22 @@ export const SelectFromSubs = ({
               errors ? "border-2 border-red-500" : "border-transparent"
             }`}
           >
+            {selectedSub ? (
+              <div className="absolute bottom-0.5 left-2">
+                <Image
+                  src={
+                    selectedSub.image ??
+                    `https://avatars.dicebear.com/api/initials/${selectedSub.name}.svg`
+                  }
+                  className="rounded-full"
+                  width={30}
+                  height={30}
+                  alt={`${selectedSub.name} icon`}
+                />
+              </div>
+            ) : (
+              <div className="absolute bottom-0 top-2 left-2 h-8 w-8 rounded-full border-4 border-dotted border-neutral-600"></div>
+            )}
             <Combobox.Input
               placeholder="Select a subreddit"
               onChange={(event) => setQuery(event.target.value)}
@@ -83,8 +99,8 @@ export const SelectFromSubs = ({
                   className={({ active }) =>
                     `relative cursor-pointer select-none py-1.5 px-6 ${
                       active
-                        ? "bg-neutral-800/50 text-zinc-400"
-                        : "text-zinc-400"
+                        ? "bg-neutral-800/50 text-gray-400"
+                        : "text-gray-400"
                     }`
                   }
                 >
