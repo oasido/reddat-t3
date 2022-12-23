@@ -83,7 +83,7 @@ const NewCommunity: NextPage = () => {
               }
               placeholder="Community name"
               className={`h-fit w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
-                errors?.name ? "border-2 border-red-600" : "border-transparent"
+                errors?.name ? "border-2 border-red-500" : "border-transparent"
               }`}
             />
             {errors?.name &&
@@ -102,7 +102,7 @@ const NewCommunity: NextPage = () => {
             placeholder="Description"
             className={`w-full rounded-md border-neutral-700 bg-neutral-800 p-2 text-gray-200 ${
               errors?.description
-                ? "border-2 border-red-600"
+                ? "border-2 border-red-500"
                 : "border-transparent"
             }`}
           />

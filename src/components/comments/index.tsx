@@ -86,7 +86,7 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
               } m-2 max-h-20 w-full resize-none rounded-md border-2 bg-neutral-700 p-2 text-white outline-0 duration-75 ease-in
               ${
                 commentInputErrors
-                  ? "border-2 border-red-600"
+                  ? "border-2 border-red-500"
                   : "border-transparent"
               }`}
             />

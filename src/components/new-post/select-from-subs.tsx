@@ -1,8 +1,8 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { trpc } from "../../utils/trpc";
-import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
 import { useState } from "react";
+import { trpc } from "../../utils/trpc";
 
 export type selectedSub =
   | {
@@ -27,19 +27,22 @@ export const SelectFromSubs = ({
 
   const [query, setQuery] = useState("");
 
-  const filteredSubs =
-    query === ""
-      ? subreddits
-      : subreddits?.filter((sub) => {
-          return sub.name.toLowerCase().includes(query.toLowerCase());
-        });
+  const [filteredSubs, setFilteredSubs] = useState(subreddits);
+
+  const searchSub = (query: string) => {
+    setFilteredSubs(
+      subreddits?.filter((sub) =>
+        sub.name.toLowerCase().includes(query.toLowerCase())
+      )
+    );
+  };
 
   return (
     <div className="my-4">
-      <div className="w-full rounded-md border border-transparent hover:border-neutral-500/50 sm:w-64">
+      <div className="w-full rounded-md sm:w-72">
         <Combobox
           nullable
-          value={selectedSub?.name}
+          value={selectedSub?.name ? `r/${selectedSub?.name}` : ""}
           onChange={(selected) => {
             setSelectedSub(subreddits?.find(({ name }) => name === selected));
           }}
@@ -47,13 +50,39 @@ export const SelectFromSubs = ({
           <Combobox.Button
             as="div"
             className={`relative rounded-md border-neutral-700 outline-none ring-0 ${
-              errors ? "border-2 border-red-600" : "border-transparent"
+              errors ? "border-2 border-red-500" : "border-transparent"
             }`}
+            onClick={() => {
+              console.log(filteredSubs, query);
+              if (
+                (filteredSubs?.length === 0 || filteredSubs === undefined) &&
+                query === "" &&
+                !selectedSub
+              ) {
+                setFilteredSubs(subreddits);
+              }
+            }}
           >
+            {selectedSub ? (
+              <div className="absolute bottom-0.5 left-2">
+                <Image
+                  src={
+                    selectedSub.image ??
+                    `https://avatars.dicebear.com/api/initials/${selectedSub.name}.svg`
+                  }
+                  className="rounded-full"
+                  width={30}
+                  height={30}
+                  alt={`${selectedSub.name} icon`}
+                />
+              </div>
+            ) : (
+              <div className="absolute bottom-0 top-2 left-2 h-8 w-8 rounded-full border-4 border-dotted border-neutral-600"></div>
+            )}
             <Combobox.Input
-              placeholder="Select a subreddit"
-              onChange={(event) => setQuery(event.target.value)}
-              className="w-full rounded-md bg-neutral-800 p-3 py-2 pl-3 pr-10 text-gray-200 hover:cursor-pointer hover:border-neutral-500"
+              placeholder="Choose a community"
+              onChange={(event) => searchSub(event.target.value)}
+              className="w-full rounded-md bg-reddit py-3 px-12 text-gray-200 hover:cursor-pointer"
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronDownIcon
@@ -72,9 +101,9 @@ export const SelectFromSubs = ({
             leaveTo="transform scale-95 opacity-0"
           >
             <Combobox.Options
-              className="absolute z-10 mt-1 max-h-60 min-w-fit overflow-auto
-                        rounded-md border border-neutral-700 bg-neutral-800 py-1 text-base shadow-lg
-                        ring-1 ring-black ring-opacity-5 focus:outline-none sm:w-64"
+              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md
+                        border border-neutral-700  bg-reddit py-1 text-base shadow-lg
+                        ring-1 ring-black ring-opacity-5 focus:outline-none sm:w-72"
             >
               {filteredSubs?.map((sub) => (
                 <Combobox.Option
@@ -83,8 +112,8 @@ export const SelectFromSubs = ({
                   className={({ active }) =>
                     `relative cursor-pointer select-none py-1.5 px-6 ${
                       active
-                        ? "bg-neutral-700 text-neutral-300"
-                        : "text-neutral-300"
+                        ? "bg-neutral-800/50 text-gray-400"
+                        : "text-gray-400"
                     }`
                   }
                 >
@@ -109,6 +138,9 @@ export const SelectFromSubs = ({
                   )}
                 </Combobox.Option>
               ))}
+              {filteredSubs?.length === 0 && (
+                <span className="p-3 text-gray-400">Nothing found</span>
+              )}
             </Combobox.Options>
           </Transition>
         </Combobox>
