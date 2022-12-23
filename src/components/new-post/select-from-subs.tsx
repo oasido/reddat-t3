@@ -36,7 +36,7 @@ export const SelectFromSubs = ({
 
   return (
     <div className="my-4">
-      <div className="w-full rounded-md sm:w-64">
+      <div className="w-full rounded-md sm:w-72">
         <Combobox
           nullable
           value={selectedSub?.name ? `r/${selectedSub?.name}` : ""}
@@ -47,7 +47,7 @@ export const SelectFromSubs = ({
           <Combobox.Button
             as="div"
             className={`relative rounded-md border-neutral-700 outline-none ring-0 ${
-              errors ? "border-2 border-red-600" : "border-transparent"
+              errors ? "border-2 border-red-500" : "border-transparent"
             }`}
           >
             <Combobox.Input
@@ -72,9 +72,9 @@ export const SelectFromSubs = ({
             leaveTo="transform scale-95 opacity-0"
           >
             <Combobox.Options
-              className="absolute z-10 mt-1 max-h-60 min-w-fit overflow-auto
-                        rounded-md border border-neutral-900 bg-neutral-900 py-1 text-base shadow-lg
-                        ring-1 ring-black ring-opacity-5 focus:outline-none sm:w-64"
+              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md
+                        border border-neutral-700  bg-reddit py-1 text-base shadow-lg
+                        ring-1 ring-black ring-opacity-5 focus:outline-none sm:w-72"
             >
               {filteredSubs?.map((sub) => (
                 <Combobox.Option
