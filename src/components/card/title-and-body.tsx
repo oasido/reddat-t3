@@ -22,6 +22,10 @@ export const TitleAndBody = ({
       <p className={`${!content && "italic"} text-gray-50`}>
         {content ?? `This post is empty`}
       </p>
+      <div
+        className={`${!content && "italic"} whitespace-pre-wrap text-gray-50`}
+      >
+      </div>
     </>
   );
 };
