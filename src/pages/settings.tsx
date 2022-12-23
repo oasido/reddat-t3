@@ -51,7 +51,7 @@ const Settings: NextPage<{ sessionData: Session }> = ({ sessionData }) => {
   }, [sessionData]);
 
   useEffect(() => {
-    if (settings.email !== sessionData?.user?.email) {
+    if (settings.email !== sessionData?.user?.email && settings.email !== "") {
       setIsChanged(true);
     } else {
       setIsChanged(false);
@@ -59,8 +59,12 @@ const Settings: NextPage<{ sessionData: Session }> = ({ sessionData }) => {
   }, [settings, sessionData]);
 
   const saveSettings = async () => {
-    console.log("savesettings");
-    return settingsSchema.safeParse(settings);
+    const parsedSettings = settingsSchema.safeParse(settings);
+    console.log(parsedSettings);
+
+    if (parsedSettings.success) {
+      // post to api
+    }
   };
 
   return (
@@ -75,16 +79,17 @@ const Settings: NextPage<{ sessionData: Session }> = ({ sessionData }) => {
       <Container>
         <h1 className="text-2xl text-white">User Settings</h1>
 
-        <div className="my-5 border-b-[1px] border-b-zinc-400">
-          <h2 className="font-bold text-zinc-400">ACCOUNT PREFERENCES</h2>
+        <div className="my-5 border-b-[1px] border-b-gray-400">
+          <h2 className="font-bold text-gray-400">ACCOUNT PREFERENCES</h2>
         </div>
 
         <div className="flex justify-between">
-          <div className="w-full">
-            <h3 className="text-lg font-medium text-zinc-200">Email Address</h3>
+          <div>
+            <h3 className="text-lg font-medium text-gray-200">Email Address</h3>
             <input
-              className="bg-transparent text-zinc-500"
-              value={settings.email ?? "No email saved"}
+              className="bg-transparent text-gray-500"
+              value={settings.email}
+              placeholder={settings.email === "" ? "No email saved" : ""}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setSettings({
                   email: e.target.value,
@@ -93,37 +98,39 @@ const Settings: NextPage<{ sessionData: Session }> = ({ sessionData }) => {
               ref={emailRef}
             />
           </div>
-          <button
-            onClick={() => {
-              if (emailRef.current !== null) {
-                emailRef.current.focus();
-              }
-            }}
-            className="rounded-3xl border-2 border-zinc-200 px-3.5 py-1 font-medium text-zinc-200"
-          >
-            {sessionData?.user?.email ? "Change" : "Add"}
-          </button>
+          <div className="flex items-center">
+            <button
+              onClick={() => {
+                if (emailRef.current !== null) {
+                  emailRef.current.focus();
+                }
+              }}
+              className="h-fit items-center rounded-3xl border-2 border-gray-200 px-3.5 py-1 font-medium text-gray-200"
+            >
+              {sessionData?.user?.email ? "Change" : "Add"}
+            </button>
+          </div>
         </div>
 
         <div className="my-5 flex justify-center gap-2">
           <button
-            className={`rounded-3xl border-2 border-zinc-200 px-3.5 py-1 font-medium text-zinc-200`}
+            className={`rounded-3xl border-2 border-gray-200 px-3.5 py-1 font-medium text-gray-200 transition duration-100 hover:bg-gray-400 hover:text-black`}
             onClick={() => setSettings(INITIAL_SETTINGS)}
           >
             Restore
           </button>
           <button
             onClick={saveSettings}
-            className={`rounded-3xl border-2 border-zinc-200 px-3.5 py-1 font-medium text-zinc-200 ${
-              isChanged && "cursor-pointer bg-green-500 text-black"
-            }`}
+            className={`rounded-3xl border-2 border-gray-200 bg-transparent px-3.5  py-1 font-medium text-gray-200 transition duration-100 hover:cursor-pointer hover:bg-green-500 hover:text-black`}
             disabled={!isChanged}
           >
             Save
           </button>
         </div>
         {isChanged && (
-          <p className="font-medium text-orange-500">Unsaved changes</p>
+          <p className="text-center font-medium text-orange-500">
+            Unsaved changes
+          </p>
         )}
       </Container>
     </>
