@@ -21,10 +21,8 @@ export const TitleAndBody = ({
       <h3 className={`${!title && "italic"} mt-1 text-xl font-bold text-white`}>
         {title ?? `Untitled`}
       </h3>
-      <div
-        className={`${!content && "italic"} whitespace-pre-wrap text-gray-50`}
-      >
-        <p className={`${!single && "line-clamp-6"}`}>
+      <div className={`${!content && "italic"} text-gray-50`}>
+        <p className={`${!single && "line-clamp-6"} whitespace-pre-wrap`}>
           {content ?? `This post is empty`}
         </p>
       </div>
