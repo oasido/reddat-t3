@@ -6,10 +6,10 @@ import { trpc } from "../../utils/trpc";
 
 export type selectedSub =
   | {
-      id: string;
-      name: string;
-      image: string | null;
-    }
+    id: string;
+    name: string;
+    image: string | null;
+  }
   | undefined;
 
 type SelectFromSubsProps = {
@@ -39,7 +39,7 @@ export const SelectFromSubs = ({
 
   return (
     <div className="my-4">
-      <div className="w-full rounded-md sm:w-72">
+      <div className="w-full rounded-sm sm:w-72">
         <Combobox
           nullable
           value={selectedSub?.name ? `r/${selectedSub?.name}` : ""}
@@ -49,9 +49,8 @@ export const SelectFromSubs = ({
         >
           <Combobox.Button
             as="div"
-            className={`relative rounded-md border-neutral-700 outline-none ring-0 ${
-              errors ? "border-2 border-red-500" : "border-transparent"
-            }`}
+            className={`relative rounded-sm border-neutral-700 outline-none ring-0 ${errors ? "border-2 border-red-500" : "border-transparent"
+              }`}
             onClick={() => {
               console.log(filteredSubs, query);
               if (
@@ -82,7 +81,7 @@ export const SelectFromSubs = ({
             <Combobox.Input
               placeholder="Choose a community"
               onChange={(event) => searchSub(event.target.value)}
-              className="w-full rounded-md bg-reddit py-3 px-12 text-gray-200 hover:cursor-pointer"
+              className="w-full rounded-sm bg-reddit py-3 px-12 text-gray-200 hover:cursor-pointer"
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronDownIcon
@@ -101,7 +100,7 @@ export const SelectFromSubs = ({
             leaveTo="transform scale-95 opacity-0"
           >
             <Combobox.Options
-              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md
+              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-sm
                         border border-neutral-700  bg-reddit py-1 text-base shadow-lg
                         ring-1 ring-black ring-opacity-5 focus:outline-none sm:w-72"
             >
@@ -110,18 +109,16 @@ export const SelectFromSubs = ({
                   key={sub.id}
                   value={sub.name}
                   className={({ active }) =>
-                    `relative cursor-pointer select-none py-1.5 px-6 ${
-                      active
-                        ? "bg-neutral-800/50 text-gray-400"
-                        : "text-gray-400"
+                    `relative cursor-pointer select-none py-1.5 px-6 ${active
+                      ? "bg-neutral-800/50 text-gray-400"
+                      : "text-gray-400"
                     }`
                   }
                 >
                   {({ selected }) => (
                     <div
-                      className={`flex items-center gap-2 truncate ${
-                        selected ? "font-medium" : "font-normal"
-                      }`}
+                      className={`flex items-center gap-2 truncate ${selected ? "font-medium" : "font-normal"
+                        }`}
                     >
                       <Image
                         src={
