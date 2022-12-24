@@ -91,9 +91,9 @@ export const subredditRouter = router({
           .string()
           .min(2)
           .max(20)
-          .regex(/^[A-Za-z]+$/, {
+          .regex(/^[a-zA-Z0-9]*$/, {
             message:
-              "Community names must only contain English letters, no spaces or symbols.",
+              "Use only English letters and numbers, no whitespaces or special characters allowed.",
           }),
         description: z.string().max(100).optional(),
         image: z.string().url().optional(),
