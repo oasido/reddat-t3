@@ -54,6 +54,7 @@ export const Card = ({
               isLoading={isLoading}
               title={title}
               content={content ?? undefined}
+              single={single}
             />
           </div>
           {!single && (
