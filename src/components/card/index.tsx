@@ -35,7 +35,11 @@ export const Card = ({
 
   return (
     <Link href={isLoading ? "#" : `/r/${subreddit?.name}/${id}`}>
-      <div className="mb-2.5 grid grid-cols-12 rounded-md border border-neutral-700 bg-neutral-800 hover:cursor-pointer hover:border-neutral-500">
+      <div
+        className={`mb-2.5 grid grid-cols-12 rounded-md border border-neutral-700 bg-neutral-800 ${
+          !single && "hover:cursor-pointer hover:border-neutral-500"
+        }`}
+      >
         <VotesComponent
           postId={id && id}
           votesCount={votesCount && votesCount}
