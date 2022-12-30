@@ -59,6 +59,9 @@ export const postsRouter = router({
           author: true,
           PostVote: true,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
 
       let nextCursor: typeof cursor | undefined = undefined;
