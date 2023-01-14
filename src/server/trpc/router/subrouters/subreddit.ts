@@ -7,7 +7,7 @@ export const subredditRouter = router({
       select: {
         id: true,
         name: true,
-        image: true,
+        cover: true,
       },
     });
   }),
@@ -124,7 +124,7 @@ export const subredditRouter = router({
               },
             },
             description: input.description,
-            image: input.image,
+            cover: input.image,
           },
         });
       } catch (error) {
