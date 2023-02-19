@@ -42,11 +42,11 @@ export const UserMenu = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="mr-2 w-fit rounded-sm border border-transparent hover:border-neutral-500/50 ">
+    <div className="mr-2 w-fit rounded-sm border border-transparent hover:border-neutral-500/50">
       <Menu>
         <div className="relative z-10 my-1.5">
           <Menu.Button className="flex w-full cursor-pointer justify-center rounded-lg bg-neutral-800 pl-2 pr-8 text-left text-lg text-white focus:outline-none focus-visible:border-neutral-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-1 focus-visible:ring-offset-neutral-300 sm:pr-10">
-            <div className="flex items-center gap-1">
+            <div className="flex min-w-max items-center gap-1">
               <Image
                 className="rounded-sm"
                 src={
@@ -83,18 +83,16 @@ export const UserMenu = () => {
                       <Menu.Item>
                         {({ active }) => (
                           <button
-                            className={`h-full w-full py-2 px-3 ${
-                              active
+                            className={`h-full w-full py-2 px-3 ${active
                                 ? "bg-neutral-700 text-neutral-300"
                                 : "text-neutral-300"
-                            }`}
+                              }`}
                             onClick={item.onClick && item.onClick}
                           >
                             <div
                               className={`flex items-center gap-2 truncate 
-                        ${active ? "font-medium" : "font-normal"} ${
-                                item.danger && " text-red-500"
-                              }`}
+                        ${active ? "font-medium" : "font-normal"} ${item.danger && " text-red-500"
+                                }`}
                             >
                               {item.icon}
                               {item.label}
