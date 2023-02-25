@@ -1,5 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from "../../trpc";
 import { z } from "zod";
+/* import { getServerAuthSession } from "./../../../../server/common/get-server-auth-session"; */
 
 export const subredditRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -7,7 +8,7 @@ export const subredditRouter = router({
       select: {
         id: true,
         name: true,
-        cover: true,
+        avatar: true,
       },
     });
   }),
@@ -33,6 +34,7 @@ export const subredditRouter = router({
   getUserSubscriptions: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!input.userId) return null;
       return await ctx.prisma.user.findUnique({
         where: {
           id: input.userId,
@@ -124,7 +126,7 @@ export const subredditRouter = router({
               },
             },
             description: input.description,
-            cover: input.image,
+            avatar: input.image,
           },
         });
       } catch (error) {
