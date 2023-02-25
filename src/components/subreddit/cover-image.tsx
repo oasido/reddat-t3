@@ -25,8 +25,12 @@ const UnsplashResponseSchema = z.array(UnsplashImageSchema);
 
 export const CoverImage = ({
   subredditMods,
+  subredditCoverImage,
+  subredditId,
 }: {
   subredditMods: SubredditModerator[];
+  subredditCoverImage: string | null;
+  subredditId: string;
 }) => {
   const { data: sessionData } = useSession();
   const key = env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
