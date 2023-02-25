@@ -150,4 +150,40 @@ export const subredditRouter = router({
       take: 5,
     });
   }),
+
+  changeCoverImage: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        subredditId: z.string(),
+        source: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // add a better way to authenticate admins
+        const isModerator = await ctx.prisma.subredditModerator.findFirst({
+          where: {
+            subredditId: input.subredditId,
+            userId: input.userId,
+          },
+        });
+
+        console.log("isModerator", isModerator);
+
+        isModerator &&
+          (await ctx.prisma.subreddit.update({
+            data: {
+              cover: input.source,
+            },
+            where: {
+              id: input.subredditId,
+            },
+          }));
+
+        !isModerator && new Error("Not a moderator");
+      } catch (error) {
+        console.log("error", error);
+      }
+    }),
 });

@@ -72,11 +72,10 @@ export const SubredditHeader = ({
               {sessionData && (
                 <button
                   onClick={handleJoinButton}
-                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${
-                    isOnCooldown
+                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${isOnCooldown
                       ? "cursor-wait bg-gray-400"
                       : "cursor-pointer bg-gray-400 hover:bg-gray-100"
-                  }`}
+                    }`}
                   disabled={isOnCooldown ? true : false}
                 >
                   {subscribe ? "Joined" : "Join"}
