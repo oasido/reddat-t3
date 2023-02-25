@@ -3,6 +3,7 @@
 
 generator client {
     provider = "prisma-client-js"
+    engineType = "binary"
 }
 
 datasource db {
@@ -65,7 +66,8 @@ model Subreddit {
     name        String    @unique
     title       String?
     description String?
-    image       String?
+    avatar      String?
+    cover       String?
     createdAt   DateTime  @default(now())
     updatedAt   DateTime? @updatedAt
 

@@ -56,7 +56,11 @@ export const SubredditHeader = ({
 
   return (
     <div className="relative h-56 bg-neutral-800">
-      <CoverImage subredditMods={subreddit?.SubredditModerator ?? []} />
+      <CoverImage
+        subredditMods={subreddit?.SubredditModerator ?? []}
+        subredditCoverImage={subreddit?.cover ?? null}
+        subredditId={subreddit?.id ?? ""}
+      />
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end">
           <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
@@ -68,11 +72,10 @@ export const SubredditHeader = ({
               {sessionData && (
                 <button
                   onClick={handleJoinButton}
-                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${
-                    isOnCooldown
+                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${isOnCooldown
                       ? "cursor-wait bg-gray-400"
                       : "cursor-pointer bg-gray-400 hover:bg-gray-100"
-                  }`}
+                    }`}
                   disabled={isOnCooldown ? true : false}
                 >
                   {subscribe ? "Joined" : "Join"}

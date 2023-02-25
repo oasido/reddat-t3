@@ -1,5 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from "../../trpc";
 import { z } from "zod";
+/* import { getServerAuthSession } from "./../../../../server/common/get-server-auth-session"; */
 
 export const subredditRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -7,7 +8,7 @@ export const subredditRouter = router({
       select: {
         id: true,
         name: true,
-        image: true,
+        avatar: true,
       },
     });
   }),
@@ -33,6 +34,7 @@ export const subredditRouter = router({
   getUserSubscriptions: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!input.userId) return null;
       return await ctx.prisma.user.findUnique({
         where: {
           id: input.userId,
@@ -124,7 +126,7 @@ export const subredditRouter = router({
               },
             },
             description: input.description,
-            image: input.image,
+            avatar: input.image,
           },
         });
       } catch (error) {
@@ -148,4 +150,40 @@ export const subredditRouter = router({
       take: 5,
     });
   }),
+
+  changeCoverImage: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        subredditId: z.string(),
+        source: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // add a better way to authenticate admins
+        const isModerator = await ctx.prisma.subredditModerator.findFirst({
+          where: {
+            subredditId: input.subredditId,
+            userId: input.userId,
+          },
+        });
+
+        console.log("isModerator", isModerator);
+
+        isModerator &&
+          (await ctx.prisma.subreddit.update({
+            data: {
+              cover: input.source,
+            },
+            where: {
+              id: input.subredditId,
+            },
+          }));
+
+        !isModerator && new Error("Not a moderator");
+      } catch (error) {
+        console.log("error", error);
+      }
+    }),
 });

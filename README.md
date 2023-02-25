@@ -20,6 +20,8 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 - [x] Ability to join subreddits
 - [x] Ability to create new subreddits
 - [x] Pagination/Infinite scrolling
+- [x] Polish new subreddit page
+- [x] Add custom Unsplash API, for usage in selecting subs cover images
 
 ### 🚧 Roadmap
 
@@ -35,8 +37,9 @@ This is an ongoing project, so expect bugs and missing features. If you find any
 
 ### 🦺 Currently working on
 
-- [ ] Polish new subreddit page
-- [ ] Add custom Unsplash API, for usage in selecting subs cover images
+- [ ] User profiles
+
+(kinda on hold atm)
 
 ### [Live demo](https://reddat.oasido.dev/)
 
