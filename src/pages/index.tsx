@@ -79,7 +79,7 @@ const Home: NextPage = () => {
         {!isLoading && (
           <h3
             ref={ref}
-            className="my-10 text-center text-2xl font-[600] text-white"
+            className="my-10 text-center text-2xl font-[600] text-white/40"
           >
             {showMorePostsPrompt()}
           </h3>
