@@ -107,8 +107,8 @@ export const postsRouter = router({
     .input(
       z.object({
         subredditId: z.string(),
-        title: z.string().min(3).max(140),
-        content: z.string().max(6000),
+        title: z.string().min(3).max(300),
+        content: z.string().max(40000),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -129,7 +129,7 @@ export const postsRouter = router({
   newComment: protectedProcedure
     .input(
       z.object({
-        content: z.string().max(150).trim().min(2),
+        content: z.string().max(10000).trim().min(2),
         postId: z.string(),
       })
     )

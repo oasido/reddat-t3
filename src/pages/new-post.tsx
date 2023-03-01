@@ -17,8 +17,8 @@ const newPostSchema = z.object({
   title: z
     .string()
     .min(3, { message: "Title must have at least 3 characters" })
-    .max(140),
-  content: z.string().max(6000, { message: "Your post is too long, chap!" }),
+    .max(300),
+  content: z.string().max(40000, { message: "Your post is too long, chap!" }),
 });
 
 export type NewPostErrors = {
