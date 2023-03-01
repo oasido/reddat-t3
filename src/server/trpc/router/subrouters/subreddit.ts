@@ -117,7 +117,7 @@ export const subredditRouter = router({
           return { error: true, msg: "User not found" };
         }
 
-        await ctx.prisma.subreddit.create({
+        const newSubreddit = await ctx.prisma.subreddit.create({
           data: {
             name: input.name,
             SubredditModerator: {
@@ -127,6 +127,13 @@ export const subredditRouter = router({
             },
             description: input.description,
             avatar: input.image,
+          },
+        });
+
+        await ctx.prisma.subredditSubscription.create({
+          data: {
+            subredditId: newSubreddit.id,
+            userId: ctx.session.user.id,
           },
         });
       } catch (error) {

@@ -18,7 +18,7 @@ export const CoverImage = ({
   const { data: sessionData } = useSession();
   const [isCoverMenuOpen, setIsOpenMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [debounced] = useDebouncedValue(searchQuery, 400);
+  const debounced = useDebouncedValue(searchQuery, 400);
 
   type ResponseSchema = {
     results: {
@@ -31,10 +31,9 @@ export const CoverImage = ({
   const [images, setImages] = useState<ResponseSchema | undefined>();
 
   const searchUnsplash = async () => {
-    if (typeof debounced === "string" && debounced.length > 0) {
+    if (typeof debounced === "string" && debounced.length > 2) {
       const response = await axios.get(`/api/unsplash?query=${debounced}`);
       setImages(response.data);
-      console.log(response.data);
     }
   };
 
@@ -61,13 +60,22 @@ export const CoverImage = ({
 
   const changeCoverImage = trpc.subreddit.changeCoverImage.useMutation();
 
+  const ctx = trpc.useContext();
+
   const handleChangeCover = async (src: string) => {
     try {
-      await changeCoverImage.mutateAsync({
-        source: src,
-        userId: sessionData?.user?.id ?? "",
-        subredditId: subredditId,
-      });
+      await changeCoverImage.mutateAsync(
+        {
+          source: src,
+          userId: sessionData?.user?.id ?? "",
+          subredditId: subredditId,
+        },
+        {
+          onSuccess: () => {
+            ctx.invalidate();
+          },
+        }
+      );
     } catch (error) {
       console.error(error);
     }
@@ -118,30 +126,38 @@ export const CoverImage = ({
             className="mb-2 rounded-md border-2 border-none bg-neutral-800/80 p-1.5 text-white "
           />
           <div className="grid grid-cols-2 gap-2">
-            {!images
+            {!searchQuery || !images
               ? defaultCoverImages.map((image) => (
-                <Image
-                  key={image}
-                  src={image}
-                  width={150}
-                  height={90}
-                  alt="image"
-                  className="hover:cursor-pointer"
-                  onClick={() => handleChangeCover(image)}
-                />
-              ))
-              : images.results.map((image) => (
-                <Image
-                  key={image.id}
-                  src={image.url}
-                  width={150}
-                  height={90}
-                  alt={image.description ?? "image"}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleChangeCover(image.url)}
-                />
-              ))}
-            {images?.results.length === 0 && (
+                  <div
+                    key={image}
+                    className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
+                  >
+                    <Image
+                      src={image}
+                      width={150}
+                      height={90}
+                      alt="image"
+                      className="hover:cursor-pointer"
+                      onClick={() => handleChangeCover(image)}
+                    />
+                  </div>
+                ))
+              : images?.results?.map((image) => (
+                  <div
+                    key={image.id}
+                    className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
+                  >
+                    <Image
+                      src={image.url}
+                      width={150}
+                      height={90}
+                      alt={image.description ?? "image"}
+                      className="hover:cursor-pointer"
+                      onClick={() => handleChangeCover(image.url)}
+                    />
+                  </div>
+                ))}
+            {images?.results?.length === 0 && (
               <p className="text-gray-200">No pictures found.</p>
             )}
           </div>

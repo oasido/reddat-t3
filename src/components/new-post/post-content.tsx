@@ -24,8 +24,9 @@ export const PostContent: FC<PostContent> = ({
             setPost({ ...post, title: event.target.value })
           }
           placeholder="Title"
-          className={`w-full rounded-sm bg-reddit p-3 text-gray-200 ${errors?.title ? "border-2 border-red-500" : "border-transparent"
-            }`}
+          className={`w-full rounded-sm bg-reddit p-3 text-gray-200 ${
+            errors?.title ? "border-2 border-red-500" : "border-transparent"
+          }`}
         />
         {errors?.title &&
           errors.title.map((error, idx) => (
@@ -41,8 +42,9 @@ export const PostContent: FC<PostContent> = ({
           setPost({ ...post, content: event.target.value })
         }
         placeholder="Text (optional)"
-        className={`h-36 w-full rounded-sm bg-reddit p-3 text-gray-200 ${errors?.content ? "border-2 border-red-500" : "border-transparent"
-          }`}
+        className={`h-56 w-full rounded-sm bg-reddit p-3 text-gray-200 ${
+          errors?.content ? "border-2 border-red-500" : "border-transparent"
+        }`}
       ></textarea>
 
       <div className="text-sm font-medium text-red-500">

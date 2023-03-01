@@ -30,7 +30,7 @@ export const Comments = ({ post }: CommentsProps): JSX.Element => {
   >();
   dayjs.extend(relativeTime);
 
-  const commentSchema = z.string().max(150).trim().min(2);
+  const commentSchema = z.string().max(10000).trim().min(2);
 
   const ctx = trpc.useContext();
   const comment = trpc.posts.newComment.useMutation();
