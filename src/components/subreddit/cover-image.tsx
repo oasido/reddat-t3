@@ -126,28 +126,36 @@ export const CoverImage = ({
             className="mb-2 rounded-md border-2 border-none bg-neutral-800/80 p-1.5 text-white "
           />
           <div className="grid grid-cols-2 gap-2">
-            {!images
+            {!searchQuery || !images
               ? defaultCoverImages.map((image) => (
-                  <Image
+                  <div
                     key={image}
-                    src={image}
-                    width={150}
-                    height={90}
-                    alt="image"
-                    className="hover:cursor-pointer"
-                    onClick={() => handleChangeCover(image)}
-                  />
+                    className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
+                  >
+                    <Image
+                      src={image}
+                      width={150}
+                      height={90}
+                      alt="image"
+                      className="hover:cursor-pointer"
+                      onClick={() => handleChangeCover(image)}
+                    />
+                  </div>
                 ))
               : images?.results?.map((image) => (
-                  <Image
+                  <div
                     key={image.id}
-                    src={image.url}
-                    width={150}
-                    height={90}
-                    alt={image.description ?? "image"}
-                    className="hover:cursor-pointer"
-                    onClick={() => handleChangeCover(image.url)}
-                  />
+                    className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
+                  >
+                    <Image
+                      src={image.url}
+                      width={150}
+                      height={90}
+                      alt={image.description ?? "image"}
+                      className="hover:cursor-pointer"
+                      onClick={() => handleChangeCover(image.url)}
+                    />
+                  </div>
                 ))}
             {images?.results?.length === 0 && (
               <p className="text-gray-200">No pictures found.</p>
