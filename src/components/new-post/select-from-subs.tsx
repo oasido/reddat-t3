@@ -6,10 +6,10 @@ import { trpc } from "../../utils/trpc";
 
 export type selectedSub =
   | {
-    id: string;
-    name: string;
-    image: string | null;
-  }
+      id: string;
+      name: string;
+      avatar: string | null;
+    }
   | undefined;
 
 type SelectFromSubsProps = {
@@ -49,8 +49,9 @@ export const SelectFromSubs = ({
         >
           <Combobox.Button
             as="div"
-            className={`relative rounded-sm border-neutral-700 outline-none ring-0 ${errors ? "border-2 border-red-500" : "border-transparent"
-              }`}
+            className={`relative rounded-sm border-neutral-700 outline-none ring-0 ${
+              errors ? "border-2 border-red-500" : "border-transparent"
+            }`}
             onClick={() => {
               console.log(filteredSubs, query);
               if (
@@ -66,7 +67,7 @@ export const SelectFromSubs = ({
               <div className="absolute bottom-0.5 left-2">
                 <Image
                   src={
-                    selectedSub.image ??
+                    selectedSub.avatar ??
                     `https://avatars.dicebear.com/api/initials/${selectedSub.name}.svg`
                   }
                   className="rounded-full"
@@ -109,20 +110,22 @@ export const SelectFromSubs = ({
                   key={sub.id}
                   value={sub.name}
                   className={({ active }) =>
-                    `relative cursor-pointer select-none py-1.5 px-6 ${active
-                      ? "bg-neutral-800/50 text-gray-400"
-                      : "text-gray-400"
+                    `relative cursor-pointer select-none py-1.5 px-6 ${
+                      active
+                        ? "bg-neutral-800/50 text-gray-400"
+                        : "text-gray-400"
                     }`
                   }
                 >
                   {({ selected }) => (
                     <div
-                      className={`flex items-center gap-2 truncate ${selected ? "font-medium" : "font-normal"
-                        }`}
+                      className={`flex items-center gap-2 truncate ${
+                        selected ? "font-medium" : "font-normal"
+                      }`}
                     >
                       <Image
                         src={
-                          sub.image ??
+                          sub.avatar ??
                           `https://avatars.dicebear.com/api/initials/${sub.name}.svg`
                         }
                         className="rounded-full"
