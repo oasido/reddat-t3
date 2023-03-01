@@ -18,7 +18,7 @@ export const CoverImage = ({
   const { data: sessionData } = useSession();
   const [isCoverMenuOpen, setIsOpenMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [debounced] = useDebouncedValue(searchQuery, 400);
+  const debounced = useDebouncedValue(searchQuery, 400);
 
   type ResponseSchema = {
     results: {
@@ -34,7 +34,6 @@ export const CoverImage = ({
     if (typeof debounced === "string" && debounced.length > 0) {
       const response = await axios.get(`/api/unsplash?query=${debounced}`);
       setImages(response.data);
-      console.log(response.data);
     }
   };
 
@@ -120,28 +119,28 @@ export const CoverImage = ({
           <div className="grid grid-cols-2 gap-2">
             {!images
               ? defaultCoverImages.map((image) => (
-                <Image
-                  key={image}
-                  src={image}
-                  width={150}
-                  height={90}
-                  alt="image"
-                  className="hover:cursor-pointer"
-                  onClick={() => handleChangeCover(image)}
-                />
-              ))
-              : images.results.map((image) => (
-                <Image
-                  key={image.id}
-                  src={image.url}
-                  width={150}
-                  height={90}
-                  alt={image.description ?? "image"}
-                  className="hover:cursor-pointer"
-                  onClick={() => handleChangeCover(image.url)}
-                />
-              ))}
-            {images?.results.length === 0 && (
+                  <Image
+                    key={image}
+                    src={image}
+                    width={150}
+                    height={90}
+                    alt="image"
+                    className="hover:cursor-pointer"
+                    onClick={() => handleChangeCover(image)}
+                  />
+                ))
+              : images?.results?.map((image) => (
+                  <Image
+                    key={image.id}
+                    src={image.url}
+                    width={150}
+                    height={90}
+                    alt={image.description ?? "image"}
+                    className="hover:cursor-pointer"
+                    onClick={() => handleChangeCover(image.url)}
+                  />
+                ))}
+            {images?.results?.length === 0 && (
               <p className="text-gray-200">No pictures found.</p>
             )}
           </div>
