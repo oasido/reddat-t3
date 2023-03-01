@@ -60,13 +60,22 @@ export const CoverImage = ({
 
   const changeCoverImage = trpc.subreddit.changeCoverImage.useMutation();
 
+  const ctx = trpc.useContext();
+
   const handleChangeCover = async (src: string) => {
     try {
-      await changeCoverImage.mutateAsync({
-        source: src,
-        userId: sessionData?.user?.id ?? "",
-        subredditId: subredditId,
-      });
+      await changeCoverImage.mutateAsync(
+        {
+          source: src,
+          userId: sessionData?.user?.id ?? "",
+          subredditId: subredditId,
+        },
+        {
+          onSuccess: () => {
+            ctx.invalidate();
+          },
+        }
+      );
     } catch (error) {
       console.error(error);
     }
