@@ -1,37 +1,25 @@
-// @ use-debounced-value hook by mantine
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect } from "react";
+// T is a generic type for value parameter, our case this will be string
+export function useDebouncedValue<T>(value: T, delay: number): T {
+  // State and setters for debounced value
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
-export function useDebouncedValue<T = any>(
-  value: T,
-  wait: number,
-  options = { leading: false }
-) {
-  const [_value, setValue] = useState(value);
-  const mountedRef = useRef(false);
-  const timeoutRef = useRef<number>(null);
-  const cooldownRef = useRef(false);
+  useEffect(
+    () => {
+      // Update debounced value after delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
 
-  const cancel = () => window.clearTimeout(timeoutRef.current);
+      // Cancel the timeout if value changes (also on delay change or unmount)
+      // This is how we prevent debounced value from updating if value is changed ...
+      // .. within the delay period. Timeout gets cleared and restarted.
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    [value, delay] // Only re-call effect if value or delay changes
+  );
 
-  useEffect(() => {
-    if (mountedRef.current) {
-      if (!cooldownRef.current && options.leading) {
-        cooldownRef.current = true;
-        setValue(value);
-      } else {
-        cancel();
-        timeoutRef.current = window.setTimeout(() => {
-          cooldownRef.current = false;
-          setValue(value);
-        }, wait);
-      }
-    }
-  }, [value, options.leading, wait]);
-
-  useEffect(() => {
-    mountedRef.current = true;
-    return cancel;
-  }, []);
-
-  return [_value, cancel] as const;
+  return debouncedValue;
 }
