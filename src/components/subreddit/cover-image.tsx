@@ -31,7 +31,7 @@ export const CoverImage = ({
   const [images, setImages] = useState<ResponseSchema | undefined>();
 
   const searchUnsplash = async () => {
-    if (typeof debounced === "string" && debounced.length > 0) {
+    if (typeof debounced === "string" && debounced.length > 2) {
       const response = await axios.get(`/api/unsplash?query=${debounced}`);
       setImages(response.data);
     }
