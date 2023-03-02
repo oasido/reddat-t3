@@ -5,6 +5,7 @@ import { SubredditModerator } from "@prisma/client";
 import axios from "axios";
 import { useDebouncedValue } from "../../hooks/use-debounced-value";
 import { trpc } from "../../utils/trpc";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 export const CoverImage = ({
   subredditMods,
@@ -16,7 +17,7 @@ export const CoverImage = ({
   subredditId: string;
 }) => {
   const { data: sessionData } = useSession();
-  const [isCoverMenuOpen, setIsOpenMenuOpen] = useState(false);
+  const [isCoverMenuOpened, setIsCoverMenuOpened] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const debounced = useDebouncedValue(searchQuery, 400);
 
@@ -55,8 +56,10 @@ export const CoverImage = ({
   ];
 
   const toggleCoverSelectionMenu = () => {
-    setIsOpenMenuOpen(!isCoverMenuOpen);
+    setIsCoverMenuOpened(!isCoverMenuOpened);
   };
+
+  const ref = useOutsideClick(() => setIsCoverMenuOpened(false));
 
   const changeCoverImage = trpc.subreddit.changeCoverImage.useMutation();
 
@@ -113,8 +116,11 @@ export const CoverImage = ({
           </svg>
         </button>
       )}
-      {isCoverMenuOpen === true && (
-        <div className="absolute right-12 top-2 flex max-h-96 flex-col overflow-y-auto rounded-md bg-neutral-700 px-3 py-2">
+      {isCoverMenuOpened === true && (
+        <div
+          ref={ref}
+          className="absolute right-12 top-2 flex max-h-96 flex-col overflow-y-auto rounded-md bg-neutral-700 px-3 py-2"
+        >
           <label className="mb-2 text-lg font-bold text-white">
             Change cover
           </label>
@@ -128,35 +134,35 @@ export const CoverImage = ({
           <div className="grid grid-cols-2 gap-2">
             {!searchQuery || !images
               ? defaultCoverImages.map((image) => (
-                  <div
-                    key={image}
-                    className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
-                  >
-                    <Image
-                      src={image}
-                      width={150}
-                      height={90}
-                      alt="image"
-                      className="hover:cursor-pointer"
-                      onClick={() => handleChangeCover(image)}
-                    />
-                  </div>
-                ))
+                <div
+                  key={image}
+                  className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
+                >
+                  <Image
+                    src={image}
+                    width={150}
+                    height={90}
+                    alt="image"
+                    className="hover:cursor-pointer"
+                    onClick={() => handleChangeCover(image)}
+                  />
+                </div>
+              ))
               : images?.results?.map((image) => (
-                  <div
-                    key={image.id}
-                    className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
-                  >
-                    <Image
-                      src={image.url}
-                      width={150}
-                      height={90}
-                      alt={image.description ?? "image"}
-                      className="hover:cursor-pointer"
-                      onClick={() => handleChangeCover(image.url)}
-                    />
-                  </div>
-                ))}
+                <div
+                  key={image.id}
+                  className="rounded-sm border-2 border-transparent hover:border-gray-200/50"
+                >
+                  <Image
+                    src={image.url}
+                    width={150}
+                    height={90}
+                    alt={image.description ?? "image"}
+                    className="hover:cursor-pointer"
+                    onClick={() => handleChangeCover(image.url)}
+                  />
+                </div>
+              ))}
             {images?.results?.length === 0 && (
               <p className="text-gray-200">No pictures found.</p>
             )}
