@@ -23,11 +23,13 @@ export default defineNextConfig({
   },
   images: {
     domains: [
+      "api.dicebear.com",
       "avatars.dicebear.com",
       "avatars.githubusercontent.com",
       "www.redditstatic.com",
       "images.unsplash.com",
       "github.com",
+      "i.imgur.com",
     ],
   },
 });
