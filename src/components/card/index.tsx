@@ -14,6 +14,9 @@ type PostCardProps = {
     PostVote: PostVote[];
     subreddit: Subreddit;
     author: User;
+    _count: {
+      comments: number;
+    };
   };
   isLoading?: boolean;
   single?: boolean;
@@ -50,6 +53,7 @@ export const Card = ({
           <div className="p-2">
             <Header
               subreddit={subreddit?.name}
+              avatar={subreddit?.avatar}
               author={author?.name ?? undefined}
               isLoading={isLoading}
               timeAgo={dayjs().to(post?.createdAt)}

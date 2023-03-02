@@ -3,6 +3,8 @@ import { trpc } from "../../utils/trpc";
 import { CoverImage } from "./cover-image";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 type SubredditHeaderProps = {
   slug: string;
@@ -54,6 +56,10 @@ export const SubredditHeader = ({
     }, 1000);
   };
 
+  if (!subreddit) {
+    return <p>Loading</p>;
+  }
+
   return (
     <div className="relative h-56 bg-neutral-800">
       <CoverImage
@@ -63,19 +69,34 @@ export const SubredditHeader = ({
       />
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex items-end">
-          <div className="mr-3 h-16 w-16 rounded-full border-4 border-white bg-orange-500" />
+          <div className="m-1 hidden h-16 w-16 xs:block">
+            <Image
+              src={
+                subreddit.avatar ??
+                `https://api.dicebear.com/5.x/identicon/png?seed=${subreddit.name}`
+              }
+              width={64}
+              height={64}
+              alt={`r/${subreddit.name}'s avatar`}
+              className={"h-full w-full rounded-full border-white p-2"}
+              objectFit="cover"
+            />
+          </div>
           <div>
             <div className="flex items-end">
               <h2 className="text-2xl font-bold text-gray-200">
-                {subreddit?.title ?? slug}
+                <Link href={`/r/${subreddit.name}`}>
+                  {subreddit?.title ?? slug}
+                </Link>
               </h2>
               {sessionData && (
                 <button
                   onClick={handleJoinButton}
-                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${isOnCooldown
+                  className={`ml-4 rounded-xl px-3 py-1 text-sm font-[600]  ${
+                    isOnCooldown
                       ? "cursor-wait bg-gray-400"
                       : "cursor-pointer bg-gray-400 hover:bg-gray-100"
-                    }`}
+                  }`}
                   disabled={isOnCooldown ? true : false}
                 >
                   {subscribe ? "Joined" : "Join"}
