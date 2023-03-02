@@ -19,6 +19,11 @@ export const postsRouter = router({
           subreddit: true,
           author: true,
           PostVote: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -58,6 +63,11 @@ export const postsRouter = router({
           subreddit: true,
           author: true,
           PostVote: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -89,6 +99,11 @@ export const postsRouter = router({
           subreddit: true,
           author: true,
           PostVote: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
           comments: {
             include: {
               author: true,

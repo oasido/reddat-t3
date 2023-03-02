@@ -65,12 +65,10 @@ export const Card = ({
               single={single}
             />
           </div>
-          {!single && (
-            <Footer
-              label="Comments"
-              icon={<ChatBubbleBottomCenterIcon className="h-4 w-4" />}
-            />
-          )}
+          <Footer
+            label={`${post?._count.comments ?? ""} Comments`}
+            icon={<ChatBubbleBottomCenterIcon className="h-4 w-4" />}
+          />
         </div>
       </div>
     </Link>
