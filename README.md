@@ -1,6 +1,6 @@
 # 📑 reddat
 
-(wip) Reddat: A Reddit clone made with Next.js, Prisma, tRPC & TailwindCSS.
+Reddat: A Reddit clone made with Next.js, Prisma, tRPC & TailwindCSS.
 This is an ongoing project, so expect bugs and missing features. If you find any, please open an issue.
 
 ## 🚀 Features & Roadmap
